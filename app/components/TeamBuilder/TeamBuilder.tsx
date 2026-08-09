@@ -10,13 +10,15 @@ import { createTeamWithDefaultGame } from "@/services/teams";
 import { createPlayers, NewPlayer } from "@/services/players";
 import ColorSwitcher from "@/app/components/ui/ColorSwitcher";
 import { useRouter } from "next/navigation";
+import {
+  MAX_PLAYER_NAME_CHARS,
+  MAX_PLAYER_NUMBER_CHARS,
+  MAX_PLAYER_POSITION_CHARS,
+} from "@/app/constants/player_limits";
 
 const GENDER_OPTIONS: Gender[] = ["Boys", "Girls", "Coed"];
 
 const MAX_TEAM_NAME_CHARS = 20;
-const MAX_NAME_CHARS = 25;
-const MAX_NUMBER_CHARS = 2;
-const MAX_POSITION_CHARS = 15;
 
 export const DIVISIONS: Division[] = [
   "U-8",
@@ -284,14 +286,14 @@ export default function TeamBuilder() {
                       type="text"
                       value={playerName}
                       onChange={(e) =>
-                        setPlayerName(e.target.value.slice(0, MAX_NAME_CHARS))
+                        setPlayerName(e.target.value.slice(0, MAX_PLAYER_NAME_CHARS))
                       }
-                      maxLength={MAX_NAME_CHARS}
+                      maxLength={MAX_PLAYER_NAME_CHARS}
                       placeholder="e.g. Alex Morgan"
                       className={s.formInput}
                     />
                     <span className={s.formCounter}>
-                      {playerName.length}/{MAX_NAME_CHARS}
+                      {playerName.length}/{MAX_PLAYER_NAME_CHARS}
                     </span>
                   </div>
                 </div>
@@ -304,15 +306,15 @@ export default function TeamBuilder() {
                       value={number}
                       onChange={(e) =>
                         setNumber(
-                          e.target.value.replace(/[^0-9]/g, "").slice(0, MAX_NUMBER_CHARS),
+                          e.target.value.replace(/[^0-9]/g, "").slice(0, MAX_PLAYER_NUMBER_CHARS),
                         )
                       }
-                      maxLength={MAX_NUMBER_CHARS}
+                      maxLength={MAX_PLAYER_NUMBER_CHARS}
                       placeholder="00"
                       className={`${s.formInput} ${s.formInputCenter}`}
                     />
                     <span className={s.formCounter}>
-                      {number.length}/{MAX_NUMBER_CHARS}
+                      {number.length}/{MAX_PLAYER_NUMBER_CHARS}
                     </span>
                   </div>
                 </div>
@@ -323,14 +325,14 @@ export default function TeamBuilder() {
                       type="text"
                       value={position}
                       onChange={(e) =>
-                        setPosition(e.target.value.slice(0, MAX_POSITION_CHARS))
+                        setPosition(e.target.value.slice(0, MAX_PLAYER_POSITION_CHARS))
                       }
-                      maxLength={MAX_POSITION_CHARS}
+                      maxLength={MAX_PLAYER_POSITION_CHARS}
                       placeholder="e.g. OMF, DMF, LW"
                       className={s.formInput}
                     />
                     <span className={s.formCounter}>
-                      {position.length}/{MAX_POSITION_CHARS}
+                      {position.length}/{MAX_PLAYER_POSITION_CHARS}
                     </span>
                   </div>
                 </div>

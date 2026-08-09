@@ -8,6 +8,10 @@ import { useTeam } from "@/context/TeamContext";
 import { useLineup } from "@/context/LineupContext";
 import { deletePlayer, updatePlayer } from "@/services/players";
 import DeletePlayerModal from "./DeletePlayerModal";
+import {
+  MAX_PLAYER_NAME_CHARS,
+  MAX_PLAYER_POSITION_CHARS,
+} from "@/app/constants/player_limits";
 
 interface PlayerInfoPopoverProps {
   player: Player;
@@ -192,7 +196,12 @@ export default function PlayerInfoPopover({
                   autoFocus
                   value={nameDraft}
                   disabled={saving}
-                  onChange={(e) => setNameDraft(e.target.value)}
+                  onChange={(e) =>
+                    setNameDraft(
+                      e.target.value.slice(0, MAX_PLAYER_NAME_CHARS),
+                    )
+                  }
+                  maxLength={MAX_PLAYER_NAME_CHARS}
                   onKeyDown={(e) => handleFieldKeyDown(e, "name")}
                   onBlur={() => handleSave("name")}
                   className={s.nameInput}
@@ -220,7 +229,12 @@ export default function PlayerInfoPopover({
                   autoFocus
                   value={positionDraft}
                   disabled={saving}
-                  onChange={(e) => setPositionDraft(e.target.value)}
+                  onChange={(e) =>
+                    setPositionDraft(
+                      e.target.value.slice(0, MAX_PLAYER_POSITION_CHARS),
+                    )
+                  }
+                  maxLength={MAX_PLAYER_POSITION_CHARS}
                   onKeyDown={(e) => handleFieldKeyDown(e, "position")}
                   onBlur={() => handleSave("position")}
                   className={s.positionInput}
