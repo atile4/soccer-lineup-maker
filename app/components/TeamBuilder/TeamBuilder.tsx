@@ -14,7 +14,7 @@ import {
   MAX_PLAYER_NAME_CHARS,
   MAX_PLAYER_NUMBER_CHARS,
   MAX_PLAYER_POSITION_CHARS,
-} from "@/app/constants/player_limits";
+} from "@/app/constants/playerLimits";
 
 const GENDER_OPTIONS: Gender[] = ["Boys", "Girls", "Coed"];
 
@@ -286,7 +286,9 @@ export default function TeamBuilder() {
                       type="text"
                       value={playerName}
                       onChange={(e) =>
-                        setPlayerName(e.target.value.slice(0, MAX_PLAYER_NAME_CHARS))
+                        setPlayerName(
+                          e.target.value.slice(0, MAX_PLAYER_NAME_CHARS),
+                        )
                       }
                       maxLength={MAX_PLAYER_NAME_CHARS}
                       placeholder="e.g. Alex Morgan"
@@ -306,7 +308,9 @@ export default function TeamBuilder() {
                       value={number}
                       onChange={(e) =>
                         setNumber(
-                          e.target.value.replace(/[^0-9]/g, "").slice(0, MAX_PLAYER_NUMBER_CHARS),
+                          e.target.value
+                            .replace(/[^0-9]/g, "")
+                            .slice(0, MAX_PLAYER_NUMBER_CHARS),
                         )
                       }
                       maxLength={MAX_PLAYER_NUMBER_CHARS}
@@ -325,7 +329,9 @@ export default function TeamBuilder() {
                       type="text"
                       value={position}
                       onChange={(e) =>
-                        setPosition(e.target.value.slice(0, MAX_PLAYER_POSITION_CHARS))
+                        setPosition(
+                          e.target.value.slice(0, MAX_PLAYER_POSITION_CHARS),
+                        )
                       }
                       maxLength={MAX_PLAYER_POSITION_CHARS}
                       placeholder="e.g. OMF, DMF, LW"

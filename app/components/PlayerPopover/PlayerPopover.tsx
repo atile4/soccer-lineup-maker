@@ -11,7 +11,7 @@ import DeletePlayerModal from "./DeletePlayerModal";
 import {
   MAX_PLAYER_NAME_CHARS,
   MAX_PLAYER_POSITION_CHARS,
-} from "@/app/constants/player_limits";
+} from "@/app/constants/playerLimits";
 
 interface PlayerInfoPopoverProps {
   player: Player;
@@ -176,133 +176,133 @@ export default function PlayerInfoPopover({
     <>
       {/* Transparent full-screen layer to catch outside clicks. */}
       <div className={s.overlay} onClick={onClose}>
-      <div
-        ref={popoverRef}
-        role="dialog"
-        aria-modal="true"
-        className={`${s.popover} ${coords ? s.popoverVisible : s.popoverHidden}`}
-        style={{
-          top: coords?.top ?? 0,
-          left: coords?.left ?? 0,
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className={s.headerRow}>
-          <div className={s.identitySection}>
-            {/* Name — text or inline input depending on edit state */}
-            <div className={s.nameRow}>
-              {editingField === "name" ? (
-                <div className={`${s.editInputWrap} w-full`}>
-                  <input
-                    autoFocus
-                    value={nameDraft}
-                    disabled={saving}
-                    onChange={(e) =>
-                      setNameDraft(
-                        e.target.value.slice(0, MAX_PLAYER_NAME_CHARS),
-                      )
-                    }
-                    maxLength={MAX_PLAYER_NAME_CHARS}
-                    onKeyDown={(e) => handleFieldKeyDown(e, "name")}
-                    onBlur={() => handleSave("name")}
-                    className={s.nameInput}
-                    aria-label="Player name"
-                  />
-                  <span className={s.counter}>
-                    {nameDraft.length}/{MAX_PLAYER_NAME_CHARS}
-                  </span>
-                </div>
-              ) : (
-                <>
-                  <h3 className={s.name}>{player.name}</h3>
-                  <button
-                    type="button"
-                    className={s.editIconButton}
-                    onClick={() => setEditingField("name")}
-                    aria-label="Edit name"
-                  >
-                    <Pencil size={13} />
-                  </button>
-                </>
-              )}
-            </div>
-
-            {/* Position — text or inline input depending on edit state */}
-            <div className={s.positionRow}>
-              {editingField === "position" ? (
-                <div className={`${s.editInputWrap} w-24`}>
-                  <input
-                    autoFocus
-                    value={positionDraft}
-                    disabled={saving}
-                    onChange={(e) =>
-                      setPositionDraft(
-                        e.target.value.slice(0, MAX_PLAYER_POSITION_CHARS),
-                      )
-                    }
-                    maxLength={MAX_PLAYER_POSITION_CHARS}
-                    onKeyDown={(e) => handleFieldKeyDown(e, "position")}
-                    onBlur={() => handleSave("position")}
-                    className={s.positionInput}
-                    aria-label="Player position"
-                  />
-                  <span className={s.counter}>
-                    {positionDraft.length}/{MAX_PLAYER_POSITION_CHARS}
-                  </span>
-                </div>
-              ) : (
-                <>
-                  <span className={s.position}>{player.position || "—"}</span>
-                  <button
-                    type="button"
-                    className={s.editIconButton}
-                    onClick={() => setEditingField("position")}
-                    aria-label="Edit position"
-                  >
-                    <Pencil size={11} />
-                  </button>
-                </>
-              )}
-            </div>
-
-            {error && <p className={s.errorText}>{error}</p>}
-          </div>
-
-          {/* Jersey badge — same shape as PlayerToken, sized down */}
-          <div className={s.jerseyWrapper}>
-            <svg viewBox="0 0 100 90" width="44" height="40">
-              <path
-                d="M25 10 L10 30 L25 35 L25 80 L75 80 L75 35 L90 30 L75 10 C70 18 60 22 50 22 C40 22 30 18 25 10Z"
-                fill={currentTeam?.color ?? "#7C3AED"}
-                className={s.jerseyPath}
-              />
-              <text
-                x="50"
-                y="58"
-                textAnchor="middle"
-                fontSize="26"
-                fontWeight="bold"
-                fill="white"
-                fontFamily="Arial, sans-serif"
-              >
-                {player.number}
-              </text>
-            </svg>
-          </div>
-        </div>
-
-        {/* Delete action — bottom-right corner */}
-        <button
-          type="button"
-          className={s.deleteButton}
-          aria-label="Delete player"
-          onClick={() => {
-            setDeleteError(null);
-            setConfirmingDelete(true);
+        <div
+          ref={popoverRef}
+          role="dialog"
+          aria-modal="true"
+          className={`${s.popover} ${coords ? s.popoverVisible : s.popoverHidden}`}
+          style={{
+            top: coords?.top ?? 0,
+            left: coords?.left ?? 0,
           }}
+          onClick={(e) => e.stopPropagation()}
         >
-          <Trash2 size={16} />
-        </button>
+          <div className={s.headerRow}>
+            <div className={s.identitySection}>
+              {/* Name — text or inline input depending on edit state */}
+              <div className={s.nameRow}>
+                {editingField === "name" ? (
+                  <div className={`${s.editInputWrap} w-full`}>
+                    <input
+                      autoFocus
+                      value={nameDraft}
+                      disabled={saving}
+                      onChange={(e) =>
+                        setNameDraft(
+                          e.target.value.slice(0, MAX_PLAYER_NAME_CHARS),
+                        )
+                      }
+                      maxLength={MAX_PLAYER_NAME_CHARS}
+                      onKeyDown={(e) => handleFieldKeyDown(e, "name")}
+                      onBlur={() => handleSave("name")}
+                      className={s.nameInput}
+                      aria-label="Player name"
+                    />
+                    <span className={s.counter}>
+                      {nameDraft.length}/{MAX_PLAYER_NAME_CHARS}
+                    </span>
+                  </div>
+                ) : (
+                  <>
+                    <h3 className={s.name}>{player.name}</h3>
+                    <button
+                      type="button"
+                      className={s.editIconButton}
+                      onClick={() => setEditingField("name")}
+                      aria-label="Edit name"
+                    >
+                      <Pencil size={13} />
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {/* Position — text or inline input depending on edit state */}
+              <div className={s.positionRow}>
+                {editingField === "position" ? (
+                  <div className={`${s.editInputWrap} w-24`}>
+                    <input
+                      autoFocus
+                      value={positionDraft}
+                      disabled={saving}
+                      onChange={(e) =>
+                        setPositionDraft(
+                          e.target.value.slice(0, MAX_PLAYER_POSITION_CHARS),
+                        )
+                      }
+                      maxLength={MAX_PLAYER_POSITION_CHARS}
+                      onKeyDown={(e) => handleFieldKeyDown(e, "position")}
+                      onBlur={() => handleSave("position")}
+                      className={s.positionInput}
+                      aria-label="Player position"
+                    />
+                    <span className={s.counter}>
+                      {positionDraft.length}/{MAX_PLAYER_POSITION_CHARS}
+                    </span>
+                  </div>
+                ) : (
+                  <>
+                    <span className={s.position}>{player.position || "—"}</span>
+                    <button
+                      type="button"
+                      className={s.editIconButton}
+                      onClick={() => setEditingField("position")}
+                      aria-label="Edit position"
+                    >
+                      <Pencil size={11} />
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {error && <p className={s.errorText}>{error}</p>}
+            </div>
+
+            {/* Jersey badge — same shape as PlayerToken, sized down */}
+            <div className={s.jerseyWrapper}>
+              <svg viewBox="0 0 100 90" width="44" height="40">
+                <path
+                  d="M25 10 L10 30 L25 35 L25 80 L75 80 L75 35 L90 30 L75 10 C70 18 60 22 50 22 C40 22 30 18 25 10Z"
+                  fill={currentTeam?.color ?? "#7C3AED"}
+                  className={s.jerseyPath}
+                />
+                <text
+                  x="50"
+                  y="58"
+                  textAnchor="middle"
+                  fontSize="26"
+                  fontWeight="bold"
+                  fill="white"
+                  fontFamily="Arial, sans-serif"
+                >
+                  {player.number}
+                </text>
+              </svg>
+            </div>
+          </div>
+
+          {/* Delete action — bottom-right corner */}
+          <button
+            type="button"
+            className={s.deleteButton}
+            aria-label="Delete player"
+            onClick={() => {
+              setDeleteError(null);
+              setConfirmingDelete(true);
+            }}
+          >
+            <Trash2 size={16} />
+          </button>
         </div>
       </div>
 

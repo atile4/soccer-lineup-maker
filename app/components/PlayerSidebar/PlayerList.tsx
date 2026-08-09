@@ -16,7 +16,7 @@ import {
   MAX_PLAYER_NAME_CHARS,
   MAX_PLAYER_NUMBER_CHARS,
   MAX_PLAYER_POSITION_CHARS,
-} from "@/app/constants/player_limits";
+} from "@/app/constants/playerLimits";
 
 // The sidebar list shows only players that aren't yet placed for the active
 // lineup. Dropping a placed player back here removes them from the lineup.
