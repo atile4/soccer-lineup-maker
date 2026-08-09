@@ -58,7 +58,7 @@ export default function ProfileMenu({
 
   const handleAboutClick = () => {
     setIsOpen(false);
-    router.push("/create");
+    router.push("/about");
     onProfileClick?.();
   };
 
