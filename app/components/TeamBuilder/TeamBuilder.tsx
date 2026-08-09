@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 
 const GENDER_OPTIONS: Gender[] = ["Boys", "Girls", "Coed"];
 
+const MAX_TEAM_NAME_CHARS = 20;
 const MAX_NAME_CHARS = 25;
 const MAX_NUMBER_CHARS = 2;
 const MAX_POSITION_CHARS = 15;
@@ -215,13 +216,21 @@ export default function TeamBuilder() {
             </div>
 
             <label className={s.fieldLabel}>Team name</label>
-            <input
-              type="text"
-              value={teamName}
-              onChange={(e) => setTeamName(e.target.value)}
-              placeholder="e.g. Thunderbolts"
-              className={s.textInput}
-            />
+            <div className={s.formInputWrap}>
+              <input
+                type="text"
+                value={teamName}
+                onChange={(e) =>
+                  setTeamName(e.target.value.slice(0, MAX_TEAM_NAME_CHARS))
+                }
+                maxLength={MAX_TEAM_NAME_CHARS}
+                placeholder="e.g. Thunderbolts"
+                className={s.textInput}
+              />
+              <span className={s.formCounter}>
+                {teamName.length}/{MAX_TEAM_NAME_CHARS}
+              </span>
+            </div>
 
             <label className={s.fieldLabel}>Division</label>
             <div className={s.selectWrapper}>

@@ -31,7 +31,7 @@ export const teamBuilderStyles = {
 
   fieldLabel: "block text-label mb-1.5",
   textInput:
-    "w-full px-3 py-2.5 text-body-sm text-ink bg-surface border border-border rounded-md mb-4 placeholder:text-faint focus:outline-none focus:ring-2 focus:ring-accent-border focus:border-accent",
+    "w-full px-3 py-2.5 pr-10 text-body-sm text-ink bg-surface border border-border rounded-md mb-4 placeholder:text-faint focus:outline-none focus:ring-2 focus:ring-accent-border focus:border-accent",
   selectWrapper: "relative mb-4",
   selectInput:
     "w-full appearance-none px-3 py-2.5 pr-9 text-body-sm text-ink bg-surface border border-border rounded-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent-border focus:border-accent",
@@ -72,7 +72,7 @@ export const teamBuilderStyles = {
     "w-full px-2.5 py-2 pr-10 text-body-sm text-ink bg-surface border border-border rounded-md placeholder:text-faint focus:outline-none focus:ring-2 focus:ring-accent-border focus:border-accent",
   formInputCenter: "text-center",
   formCounter:
-    "absolute right-2 bottom-1.5 text-[10px] leading-none text-faint pointer-events-none select-none",
+    "absolute right-2 bottom-0.5 text-[10px] leading-none text-faint pointer-events-none select-none",
   addButton:
     "px-4 h-[38px] text-body-sm font-semibold text-white bg-accent rounded-md shadow-sm hover:bg-accent-hover whitespace-nowrap transition-colors",
 
@@ -80,7 +80,8 @@ export const teamBuilderStyles = {
     "flex items-center gap-2.5 px-3.5 py-2.5 bg-danger-fill border border-danger-border rounded-lg",
   dupeWarningText: "text-body-sm font-semibold text-danger",
 
-  rosterCard: "bg-surface border border-border rounded-xl shadow-sm overflow-hidden",
+  rosterCard:
+    "bg-surface border border-border rounded-xl shadow-sm overflow-hidden",
   rosterHeader:
     "flex items-center justify-between px-4 py-3 border-b border-border",
   rosterTitle: "text-h3",
