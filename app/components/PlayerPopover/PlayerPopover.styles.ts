@@ -19,6 +19,10 @@ export const playerInfoPopoverStyles = {
   positionRow: "mt-1 flex items-center gap-1.5",
   position: "text-body-sm text-muted",
 
+  editInputWrap: "flex flex-col",
+  counter:
+    "text-[10px] leading-none text-faint text-right pointer-events-none select-none mt-1",
+
   editIconButton:
     "flex-shrink-0 text-muted hover:text-ink cursor-pointer transition-colors disabled:opacity-40 disabled:cursor-not-allowed",
 

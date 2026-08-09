@@ -192,21 +192,26 @@ export default function PlayerInfoPopover({
             {/* Name — text or inline input depending on edit state */}
             <div className={s.nameRow}>
               {editingField === "name" ? (
-                <input
-                  autoFocus
-                  value={nameDraft}
-                  disabled={saving}
-                  onChange={(e) =>
-                    setNameDraft(
-                      e.target.value.slice(0, MAX_PLAYER_NAME_CHARS),
-                    )
-                  }
-                  maxLength={MAX_PLAYER_NAME_CHARS}
-                  onKeyDown={(e) => handleFieldKeyDown(e, "name")}
-                  onBlur={() => handleSave("name")}
-                  className={s.nameInput}
-                  aria-label="Player name"
-                />
+                <div className={`${s.editInputWrap} w-full`}>
+                  <input
+                    autoFocus
+                    value={nameDraft}
+                    disabled={saving}
+                    onChange={(e) =>
+                      setNameDraft(
+                        e.target.value.slice(0, MAX_PLAYER_NAME_CHARS),
+                      )
+                    }
+                    maxLength={MAX_PLAYER_NAME_CHARS}
+                    onKeyDown={(e) => handleFieldKeyDown(e, "name")}
+                    onBlur={() => handleSave("name")}
+                    className={s.nameInput}
+                    aria-label="Player name"
+                  />
+                  <span className={s.counter}>
+                    {nameDraft.length}/{MAX_PLAYER_NAME_CHARS}
+                  </span>
+                </div>
               ) : (
                 <>
                   <h3 className={s.name}>{player.name}</h3>
@@ -225,21 +230,26 @@ export default function PlayerInfoPopover({
             {/* Position — text or inline input depending on edit state */}
             <div className={s.positionRow}>
               {editingField === "position" ? (
-                <input
-                  autoFocus
-                  value={positionDraft}
-                  disabled={saving}
-                  onChange={(e) =>
-                    setPositionDraft(
-                      e.target.value.slice(0, MAX_PLAYER_POSITION_CHARS),
-                    )
-                  }
-                  maxLength={MAX_PLAYER_POSITION_CHARS}
-                  onKeyDown={(e) => handleFieldKeyDown(e, "position")}
-                  onBlur={() => handleSave("position")}
-                  className={s.positionInput}
-                  aria-label="Player position"
-                />
+                <div className={`${s.editInputWrap} w-24`}>
+                  <input
+                    autoFocus
+                    value={positionDraft}
+                    disabled={saving}
+                    onChange={(e) =>
+                      setPositionDraft(
+                        e.target.value.slice(0, MAX_PLAYER_POSITION_CHARS),
+                      )
+                    }
+                    maxLength={MAX_PLAYER_POSITION_CHARS}
+                    onKeyDown={(e) => handleFieldKeyDown(e, "position")}
+                    onBlur={() => handleSave("position")}
+                    className={s.positionInput}
+                    aria-label="Player position"
+                  />
+                  <span className={s.counter}>
+                    {positionDraft.length}/{MAX_PLAYER_POSITION_CHARS}
+                  </span>
+                </div>
               ) : (
                 <>
                   <span className={s.position}>{player.position || "—"}</span>

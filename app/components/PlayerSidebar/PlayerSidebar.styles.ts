@@ -44,10 +44,9 @@ export const playerSidebarStyles = {
   createModalForm: "space-y-4",
   createModalLabel: "block text-label text-ink-2 mb-1",
   createModalInput:
-    "w-full rounded-md border border-border bg-surface px-3 py-2 pr-9 text-body-sm text-ink placeholder:text-faint focus:outline-none focus:ring-2 focus:ring-accent-border focus:border-accent",
-  createModalInputWrap: "relative",
+    "w-full rounded-md border border-border bg-surface px-3 py-2 text-body-sm text-ink placeholder:text-faint focus:outline-none focus:ring-2 focus:ring-accent-border focus:border-accent",
   createModalCounter:
-    "absolute right-2 bottom-0.5 text-[10px] leading-none text-faint pointer-events-none select-none",
+    "block text-right text-[10px] leading-none text-faint pointer-events-none select-none mt-1",
   createModalError: "text-body-sm text-danger mt-1",
   createModalActions: "flex justify-end gap-2",
   createModalCancelButton:

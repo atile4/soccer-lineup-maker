@@ -152,23 +152,21 @@ export const PlayerList = () => {
             >
               Name
             </label>
-            <div className={playerSidebarStyles.createModalInputWrap}>
-              <input
-                id="player-name"
-                type="text"
-                value={name}
-                onChange={(e) =>
-                  setName(e.target.value.slice(0, MAX_PLAYER_NAME_CHARS))
-                }
-                maxLength={MAX_PLAYER_NAME_CHARS}
-                className={playerSidebarStyles.createModalInput}
-                placeholder="Player name"
-                autoFocus
-              />
-              <span className={playerSidebarStyles.createModalCounter}>
-                {name.length}/{MAX_PLAYER_NAME_CHARS}
-              </span>
-            </div>
+            <input
+              id="player-name"
+              type="text"
+              value={name}
+              onChange={(e) =>
+                setName(e.target.value.slice(0, MAX_PLAYER_NAME_CHARS))
+              }
+              maxLength={MAX_PLAYER_NAME_CHARS}
+              className={playerSidebarStyles.createModalInput}
+              placeholder="Player name"
+              autoFocus
+            />
+            <span className={playerSidebarStyles.createModalCounter}>
+              {name.length}/{MAX_PLAYER_NAME_CHARS}
+            </span>
             {error && (
               <p className={playerSidebarStyles.createModalError}>{error}</p>
             )}
@@ -180,28 +178,26 @@ export const PlayerList = () => {
             >
               Number
             </label>
-            <div className={playerSidebarStyles.createModalInputWrap}>
-              <input
-                id="player-number"
-                type="text"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                value={number}
-                onChange={(e) =>
-                  setNumber(
-                    e.target.value
-                      .replace(/[^0-9]/g, "")
-                      .slice(0, MAX_PLAYER_NUMBER_CHARS),
-                  )
-                }
-                maxLength={MAX_PLAYER_NUMBER_CHARS}
-                placeholder={String(nextNumber)}
-                className={playerSidebarStyles.createModalInput}
-              />
-              <span className={playerSidebarStyles.createModalCounter}>
-                {number.length}/{MAX_PLAYER_NUMBER_CHARS}
-              </span>
-            </div>
+            <input
+              id="player-number"
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              value={number}
+              onChange={(e) =>
+                setNumber(
+                  e.target.value
+                    .replace(/[^0-9]/g, "")
+                    .slice(0, MAX_PLAYER_NUMBER_CHARS),
+                )
+              }
+              maxLength={MAX_PLAYER_NUMBER_CHARS}
+              placeholder={String(nextNumber)}
+              className={playerSidebarStyles.createModalInput}
+            />
+            <span className={playerSidebarStyles.createModalCounter}>
+              {number.length}/{MAX_PLAYER_NUMBER_CHARS}
+            </span>
           </div>
           <div>
             <label
@@ -210,22 +206,20 @@ export const PlayerList = () => {
             >
               Position
             </label>
-            <div className={playerSidebarStyles.createModalInputWrap}>
-              <input
-                id="player-position"
-                type="text"
-                value={position}
-                onChange={(e) =>
-                  setPosition(e.target.value.slice(0, MAX_PLAYER_POSITION_CHARS))
-                }
-                maxLength={MAX_PLAYER_POSITION_CHARS}
-                className={playerSidebarStyles.createModalInput}
-                placeholder="e.g FWD, DMF, LW"
-              />
-              <span className={playerSidebarStyles.createModalCounter}>
-                {position.length}/{MAX_PLAYER_POSITION_CHARS}
-              </span>
-            </div>
+            <input
+              id="player-position"
+              type="text"
+              value={position}
+              onChange={(e) =>
+                setPosition(e.target.value.slice(0, MAX_PLAYER_POSITION_CHARS))
+              }
+              maxLength={MAX_PLAYER_POSITION_CHARS}
+              className={playerSidebarStyles.createModalInput}
+              placeholder="e.g FWD, DMF, LW"
+            />
+            <span className={playerSidebarStyles.createModalCounter}>
+              {position.length}/{MAX_PLAYER_POSITION_CHARS}
+            </span>
           </div>
           <div className={playerSidebarStyles.createModalActions}>
             <button
