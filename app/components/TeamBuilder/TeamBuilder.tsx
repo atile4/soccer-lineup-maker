@@ -13,6 +13,10 @@ import { useRouter } from "next/navigation";
 
 const GENDER_OPTIONS: Gender[] = ["Boys", "Girls", "Coed"];
 
+const MAX_NAME_CHARS = 25;
+const MAX_NUMBER_CHARS = 2;
+const MAX_POSITION_CHARS = 15;
+
 export const DIVISIONS: Division[] = [
   "U-8",
   "U-10",
@@ -265,39 +269,61 @@ export default function TeamBuilder() {
               <form onSubmit={handleAddPlayer} className={s.addForm}>
                 <div className={s.formField}>
                   <label className={s.formLabel}>Name</label>
-                  <input
-                    ref={playerNameRef}
-                    type="text"
-                    value={playerName}
-                    onChange={(e) => setPlayerName(e.target.value)}
-                    placeholder="e.g. Alex Morgan"
-                    className={s.formInput}
-                  />
+                  <div className={s.formInputWrap}>
+                    <input
+                      ref={playerNameRef}
+                      type="text"
+                      value={playerName}
+                      onChange={(e) =>
+                        setPlayerName(e.target.value.slice(0, MAX_NAME_CHARS))
+                      }
+                      maxLength={MAX_NAME_CHARS}
+                      placeholder="e.g. Alex Morgan"
+                      className={s.formInput}
+                    />
+                    <span className={s.formCounter}>
+                      {playerName.length}/{MAX_NAME_CHARS}
+                    </span>
+                  </div>
                 </div>
                 <div className={s.formField}>
                   <label className={s.formLabel}># (optional)</label>
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    value={number}
-                    onChange={(e) =>
-                      setNumber(
-                        e.target.value.replace(/[^0-9]/g, "").slice(0, 2),
-                      )
-                    }
-                    placeholder="00"
-                    className={`${s.formInput} ${s.formInputCenter}`}
-                  />
+                  <div className={s.formInputWrap}>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      value={number}
+                      onChange={(e) =>
+                        setNumber(
+                          e.target.value.replace(/[^0-9]/g, "").slice(0, MAX_NUMBER_CHARS),
+                        )
+                      }
+                      maxLength={MAX_NUMBER_CHARS}
+                      placeholder="00"
+                      className={`${s.formInput} ${s.formInputCenter}`}
+                    />
+                    <span className={s.formCounter}>
+                      {number.length}/{MAX_NUMBER_CHARS}
+                    </span>
+                  </div>
                 </div>
                 <div className={s.formField}>
                   <label className={s.formLabel}>Position (optional)</label>
-                  <input
-                    type="text"
-                    value={position}
-                    onChange={(e) => setPosition(e.target.value)}
-                    placeholder="e.g. OMF, DMF, LW"
-                    className={s.formInput}
-                  />
+                  <div className={s.formInputWrap}>
+                    <input
+                      type="text"
+                      value={position}
+                      onChange={(e) =>
+                        setPosition(e.target.value.slice(0, MAX_POSITION_CHARS))
+                      }
+                      maxLength={MAX_POSITION_CHARS}
+                      placeholder="e.g. OMF, DMF, LW"
+                      className={s.formInput}
+                    />
+                    <span className={s.formCounter}>
+                      {position.length}/{MAX_POSITION_CHARS}
+                    </span>
+                  </div>
                 </div>
                 <button type="submit" className={s.addButton}>
                   <span className="inline-flex items-center gap-1.5">

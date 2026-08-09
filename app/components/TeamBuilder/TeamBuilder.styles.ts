@@ -67,9 +67,12 @@ export const teamBuilderStyles = {
     "grid grid-cols-2 sm:grid-cols-[1fr_78px_1.2fr_auto] gap-2.5 items-end",
   formField: "flex flex-col gap-1",
   formLabel: "text-caption font-semibold text-muted",
+  formInputWrap: "relative",
   formInput:
-    "w-full px-2.5 py-2 text-body-sm text-ink bg-surface border border-border rounded-md placeholder:text-faint focus:outline-none focus:ring-2 focus:ring-accent-border focus:border-accent",
+    "w-full px-2.5 py-2 pr-10 text-body-sm text-ink bg-surface border border-border rounded-md placeholder:text-faint focus:outline-none focus:ring-2 focus:ring-accent-border focus:border-accent",
   formInputCenter: "text-center",
+  formCounter:
+    "absolute right-2 bottom-1.5 text-[10px] leading-none text-faint pointer-events-none select-none",
   addButton:
     "px-4 h-[38px] text-body-sm font-semibold text-white bg-accent rounded-md shadow-sm hover:bg-accent-hover whitespace-nowrap transition-colors",
 
