@@ -16,6 +16,8 @@ interface ToastState {
 // Managing teams — edit the current team's name and jersey color. Edits are
 // staged locally and committed together by the Save button, persisting through
 // TeamContext (optimistic update + revert on failure).
+const MAX_TEAM_NAME_CHARS = 20;
+
 export const ManageTeamsTab: React.FC = () => {
   const { currentTeam, updateTeamName, updateTeamColor } = useTeam();
 
@@ -74,8 +76,14 @@ export const ManageTeamsTab: React.FC = () => {
           value={name}
           placeholder="Team name"
           className={sidebarStyles.textInput}
-          onChange={(e) => setName(e.target.value)}
+          maxLength={MAX_TEAM_NAME_CHARS}
+          onChange={(e) =>
+            setName(e.target.value.slice(0, MAX_TEAM_NAME_CHARS))
+          }
         />
+        <span className={sidebarStyles.fieldCounter}>
+          {name.length}/{MAX_TEAM_NAME_CHARS}
+        </span>
       </div>
 
       {/* Edit team color */}

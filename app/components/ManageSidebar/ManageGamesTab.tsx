@@ -27,6 +27,8 @@ import CreateGameModal from "./CreateGameModal";
 import DeleteGameModal from "./DeleteGameModal";
 import GameSelectDropdown from "./GameSelectDropdown";
 
+const MAX_NOTES_CHARS = 500;
+
 interface ManageGamesTabProps {
   teamId: string | null;
 }
@@ -230,10 +232,14 @@ export const ManageGamesTab: React.FC<ManageGamesTabProps> = ({ teamId }) => {
             placeholder="Add notes here..."
             value={notes}
             className={sidebarStyles.textArea}
+            maxLength={MAX_NOTES_CHARS}
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-              setNotes(e.target.value)
+              setNotes(e.target.value.slice(0, MAX_NOTES_CHARS))
             }
           />
+          <span className={sidebarStyles.fieldCounter}>
+            {notes.length}/{MAX_NOTES_CHARS}
+          </span>
           {/* Save Notes button — disabled until notes actually differ from currentGame.notes */}
           <button
             type="button"

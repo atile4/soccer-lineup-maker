@@ -74,6 +74,9 @@ export const sidebarStyles = {
   textArea:
     "w-full px-3 py-2 text-body-sm text-ink bg-surface border border-border rounded-md resize-y min-h-[80px] placeholder:text-faint focus:outline-none focus:ring-2 focus:ring-accent-border focus:border-accent",
 
+  fieldCounter:
+    "self-end text-[10px] leading-none text-faint pointer-events-none select-none mt-0.5",
+
   errorText: "text-caption text-danger mt-1",
   extraSectionText: "text-caption text-muted",
 

@@ -5,6 +5,8 @@ import { Check, ChevronDown, Pencil, Trash2, X } from "lucide-react";
 import { sidebarStyles } from "./ManageSidebar.styles";
 import { Game } from "@/app/types";
 
+const MAX_GAME_NAME_CHARS = 20;
+
 interface GameSelectDropdownProps {
   games: Game[];
   currentGameId: string | null;
@@ -129,43 +131,55 @@ export default function GameSelectDropdown({
               >
                 {isEditing ? (
                   <>
-                    <input
-                      ref={editInputRef}
-                      type="text"
-                      value={draftName}
-                      disabled={savingRename}
-                      className={sidebarStyles.gameSelectEditInput}
-                      onChange={(e) => setDraftName(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          e.preventDefault();
-                          commitRename(g.id);
-                        } else if (e.key === "Escape") {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          cancelEdit();
+                    <div className="flex flex-wrap items-center gap-2">
+                      <input
+                        ref={editInputRef}
+                        type="text"
+                        value={draftName}
+                        disabled={savingRename}
+                        className={sidebarStyles.gameSelectEditInput}
+                        maxLength={MAX_GAME_NAME_CHARS}
+                        onChange={(e) =>
+                          setDraftName(
+                            e.target.value.slice(0, MAX_GAME_NAME_CHARS),
+                          )
                         }
-                      }}
-                      aria-label={`Rename ${g.name}`}
-                    />
-                    <button
-                      type="button"
-                      className={sidebarStyles.gameSelectEditButton}
-                      onClick={() => commitRename(g.id)}
-                      disabled={savingRename}
-                      aria-label="Save name"
-                    >
-                      <Check size={16} />
-                    </button>
-                    <button
-                      type="button"
-                      className={sidebarStyles.gameSelectDeleteButton}
-                      onClick={cancelEdit}
-                      disabled={savingRename}
-                      aria-label="Cancel rename"
-                    >
-                      <X size={16} />
-                    </button>
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            commitRename(g.id);
+                          } else if (e.key === "Escape") {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            cancelEdit();
+                          }
+                        }}
+                        aria-label={`Rename ${g.name}`}
+                      />
+                      <button
+                        type="button"
+                        className={sidebarStyles.gameSelectEditButton}
+                        onClick={() => commitRename(g.id)}
+                        disabled={savingRename}
+                        aria-label="Save name"
+                      >
+                        <Check size={16} />
+                      </button>
+                      <button
+                        type="button"
+                        className={sidebarStyles.gameSelectDeleteButton}
+                        onClick={cancelEdit}
+                        disabled={savingRename}
+                        aria-label="Cancel rename"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                    <span className="w-full text-right">
+                      <span className={sidebarStyles.fieldCounter}>
+                        {draftName.length}/{MAX_GAME_NAME_CHARS}
+                      </span>
+                    </span>
                   </>
                 ) : (
                   <>
