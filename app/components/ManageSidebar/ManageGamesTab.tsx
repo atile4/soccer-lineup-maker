@@ -22,13 +22,13 @@ import { SplitBy, Game } from "@/app/types";
 
 // util
 import { getPeriodsToRemove } from "@/app/utils/period";
+import { MAX_GAMES } from "@/app/constants/playerLimits";
 import SplitChangeWarningModal from "./SplitChangeWarningModal";
 import CreateGameModal from "./CreateGameModal";
 import DeleteGameModal from "./DeleteGameModal";
 import GameSelectDropdown from "./GameSelectDropdown";
 
 const MAX_NOTES_CHARS = 500;
-const MAX_GAMES = 3;
 
 interface ManageGamesTabProps {
   teamId: string | null;

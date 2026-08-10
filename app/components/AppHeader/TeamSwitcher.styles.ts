@@ -48,10 +48,15 @@ export const teamSwitcherStyles = {
 
   // Divider + "Create team" row
   divider: "my-1 border-t border-border",
+  createOptionWrap: "relative",
   createOption:
     "w-full flex items-center gap-3 px-3 py-2.5 hover:bg-surface-subtle transition-colors text-left",
   createIconWrap:
     "w-8 h-8 rounded-full border-2 border-dashed border-accent-border flex items-center justify-center flex-shrink-0 text-accent",
   createIcon: "h-4 w-4",
   createText: "text-body-sm font-semibold text-accent",
+
+  // Warning popover — shown when the team limit is reached
+  limitPopover:
+    "absolute bottom-full right-0 mb-2 w-56 rounded-lg border border-border bg-surface px-3 py-2 shadow-lg z-10 text-caption text-danger",
 };

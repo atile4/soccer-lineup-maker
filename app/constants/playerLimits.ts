@@ -24,3 +24,9 @@ export const MAX_PLAYERS_BY_DIV = {
   u16: 11,
   u18: 11,
 };
+
+// Maximum teams per account
+export const MAX_TEAMS = 2;
+
+// Maximum games per team
+export const MAX_GAMES = 3;

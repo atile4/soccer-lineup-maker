@@ -6,6 +6,7 @@ import { ChevronDown, Check, Plus, Trash2 } from "lucide-react";
 import { teamSwitcherStyles as styles } from "./TeamSwitcher.styles";
 import { useTeam } from "@/context/TeamContext";
 import { TeamWithPlayerCount } from "@/app/types";
+import { MAX_TEAMS } from "@/app/constants/playerLimits";
 import DeleteTeamWarningModal from "./DeleteTeamWarningModal";
 
 // One line of "division · gender · player count" text
@@ -25,6 +26,7 @@ export default function TeamSwitcher() {
     null,
   );
   const [deleting, setDeleting] = useState(false);
+  const [showLimitWarning, setShowLimitWarning] = useState(false);
   const router = useRouter();
 
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -57,6 +59,10 @@ export default function TeamSwitcher() {
   };
 
   const handleCreateTeam = () => {
+    if (teams.length >= MAX_TEAMS) {
+      setShowLimitWarning(true);
+      return;
+    }
     setIsOpen(false);
     router.push("/create");
   };
@@ -103,7 +109,10 @@ export default function TeamSwitcher() {
         ref={buttonRef}
         type="button"
         className={styles.trigger}
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={() => {
+          if (showLimitWarning) setShowLimitWarning(false);
+          setIsOpen((prev) => !prev);
+        }}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
       >
@@ -168,16 +177,23 @@ export default function TeamSwitcher() {
 
           {/* Create Team Button */}
           <div className={styles.divider} />
-          <button
-            type="button"
-            onClick={handleCreateTeam}
-            className={styles.createOption}
-          >
-            <span className={styles.createIconWrap} aria-hidden="true">
-              <Plus className={styles.createIcon} />
-            </span>
-            <span className={styles.createText}>Create team</span>
-          </button>
+          <div className={styles.createOptionWrap}>
+            <button
+              type="button"
+              onClick={handleCreateTeam}
+              className={styles.createOption}
+            >
+              <span className={styles.createIconWrap} aria-hidden="true">
+                <Plus className={styles.createIcon} />
+              </span>
+              <span className={styles.createText}>Create team</span>
+            </button>
+            {showLimitWarning && (
+              <div className={styles.limitPopover} role="alert">
+                You can have at most {MAX_TEAMS} teams.
+              </div>
+            )}
+          </div>
         </div>
       )}
 
