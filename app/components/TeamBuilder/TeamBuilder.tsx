@@ -14,11 +14,10 @@ import {
   MAX_PLAYER_NAME_CHARS,
   MAX_PLAYER_NUMBER_CHARS,
   MAX_PLAYER_POSITION_CHARS,
+  MAX_TEAM_NAME_CHARS,
 } from "@/app/constants/playerLimits";
 
 const GENDER_OPTIONS: Gender[] = ["Boys", "Girls", "Coed"];
-
-const MAX_TEAM_NAME_CHARS = 20;
 
 export const DIVISIONS: Division[] = [
   "U-8",

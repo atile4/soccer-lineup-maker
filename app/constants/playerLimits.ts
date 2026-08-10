@@ -14,6 +14,7 @@ export const MAX_PLAYERS = 11;
 export const MAX_PLAYER_NAME_CHARS = 25;
 export const MAX_PLAYER_NUMBER_CHARS = 2;
 export const MAX_PLAYER_POSITION_CHARS = 15;
+export const MAX_TEAM_NAME_CHARS = 20;
 
 export const MAX_PLAYERS_BY_DIV = {
   u8: 4,
