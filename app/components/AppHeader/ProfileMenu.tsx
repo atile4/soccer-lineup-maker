@@ -27,6 +27,7 @@ export default function ProfileMenu({
   const email = user?.email ?? "";
 
   const [isOpen, setIsOpen] = useState(false);
+  const [rulesetWarningsEnabled, setRulesetWarningsEnabled] = useState(false);
   const popoverRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const reportIssuesUrl =
@@ -75,6 +76,10 @@ export default function ProfileMenu({
   const handleLogoutClick = () => {
     setIsOpen(false);
     onLogout?.();
+  };
+
+  const handleRulesetWarningsToggle = () => {
+    setRulesetWarningsEnabled((enabled) => !enabled);
   };
 
   const getInitials = (name: string) =>
@@ -195,6 +200,29 @@ export default function ProfileMenu({
               </svg>
               <div className={popoverStyles.menuText}>Report Issues</div>
             </div>
+          </div>
+
+          {/* AYSO Ruleset Warnings */}
+          <div className={popoverStyles.rulesetWarningsSection}>
+            <div>
+              <div className={popoverStyles.rulesetWarningsTitle}>
+                AYSO Ruleset Warnings
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={handleRulesetWarningsToggle}
+              aria-pressed={rulesetWarningsEnabled}
+              className={popoverStyles.rulesetWarningsToggle}
+            >
+              <span
+                className={popoverStyles.rulesetWarningsTrack}
+                data-enabled={rulesetWarningsEnabled}
+                aria-hidden="true"
+              >
+                <span className={popoverStyles.rulesetWarningsThumb} />
+              </span>
+            </button>
           </div>
 
           {/* Logout */}

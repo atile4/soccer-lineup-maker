@@ -18,6 +18,18 @@ export const popoverStyles = {
     "flex items-center space-x-3 px-4 py-3 border-t border-border hover:bg-danger-fill transition-colors cursor-pointer",
   logoutIcon: "w-5 h-5 text-danger",
   logoutText: "text-body-sm font-medium text-danger",
+
+  // AYSO ruleset warnings section
+  rulesetWarningsSection:
+    "flex items-center justify-between gap-3 px-4 py-3 border-t border-border",
+  rulesetWarningsTitle: "text-body-sm text-ink",
+  rulesetWarningsDescription: "text-caption text-muted mt-0.5",
+  rulesetWarningsToggle:
+    "relative inline-flex h-5 w-10 items-center rounded-full focus:outline-none",
+  rulesetWarningsTrack:
+    "group relative inline-flex h-5 w-10 items-center rounded-full bg-muted transition-colors data-[enabled=true]:bg-accent",
+  rulesetWarningsThumb:
+    "absolute left-0 h-5 w-5 rounded-full bg-surface shadow-sm transition-transform group-data-[enabled=true]:translate-x-5",
 };
 
 export const buttonStyles = {

@@ -20,6 +20,7 @@ export default function CreateGameModal({
   creating = false,
 }: CreateGameModalProps) {
   const [name, setName] = useState("");
+  const MAX_NAME_CHARS = 20;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,10 +46,14 @@ export default function CreateGameModal({
           id="game-name"
           type="text"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => setName(e.target.value.slice(0, MAX_NAME_CHARS))}
+          maxLength={MAX_NAME_CHARS}
           placeholder="vs. Golden Griffins"
           autoFocus
         />
+        <div className="mt-0.5 flex justify-end text-[10px] leading-none text-faint">
+          {name.length}/{MAX_NAME_CHARS}
+        </div>
 
         <div className={modalStyles.actions}>
           <Button
