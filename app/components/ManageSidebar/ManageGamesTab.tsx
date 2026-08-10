@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ChevronDown, Plus } from "lucide-react";
 import { sidebarStyles } from "./ManageSidebar.styles";
@@ -28,6 +28,7 @@ import DeleteGameModal from "./DeleteGameModal";
 import GameSelectDropdown from "./GameSelectDropdown";
 
 const MAX_NOTES_CHARS = 500;
+const MAX_GAMES = 3;
 
 interface ManageGamesTabProps {
   teamId: string | null;
@@ -45,11 +46,13 @@ export const ManageGamesTab: React.FC<ManageGamesTabProps> = ({ teamId }) => {
   const { games, currentGame, switchGame, refreshGameData } = useGame();
 
   const [splitBy, setSplitBy] = useState<SplitBy>();
-  const [notes, setNotes] = useState(""); // @TODO save notes to db
+  const [notes, setNotes] = useState("");
   const [pendingSplit, setPendingSplit] = useState<SplitBy | null>(null);
   const [savingSplit, setSavingSplit] = useState(false);
 
   const [showCreateGameModal, setShowCreateGameModal] = useState(false);
+  const [showGameLimitWarning, setShowGameLimitWarning] = useState(false);
+  const createButtonRef = useRef<HTMLButtonElement>(null);
   const [creatingGame, setCreatingGame] = useState(false);
   const [gameToDelete, setGameToDelete] = useState<Game | null>(null);
   const [deletingGame, setDeletingGame] = useState(false);
@@ -74,6 +77,26 @@ export const ManageGamesTab: React.FC<ManageGamesTabProps> = ({ teamId }) => {
       setNotes(currentGame.notes ?? ""); // keep the notes box in sync when switching games
     }
   }, [currentGame]);
+
+  // dismiss the game-limit warning once the user clicks anywhere else
+  useEffect(() => {
+    if (!showGameLimitWarning) return;
+    const handler = (e: MouseEvent) => {
+      if (createButtonRef.current?.contains(e.target as Node)) return;
+      setShowGameLimitWarning(false);
+    };
+    document.addEventListener("click", handler);
+    return () => document.removeEventListener("click", handler);
+  }, [showGameLimitWarning]);
+
+  const handleCreateGameClick = () => {
+    if (!teamId) return;
+    if (games.length >= MAX_GAMES) {
+      setShowGameLimitWarning(true);
+      return;
+    }
+    setShowCreateGameModal(true);
+  };
 
   // handling changing game split
   const handleSplitSelect = (value: SplitBy) => {
@@ -192,7 +215,8 @@ export const ManageGamesTab: React.FC<ManageGamesTabProps> = ({ teamId }) => {
         {/* Create Game button — opens CreateGameModal, disabled with no team selected */}
         <button
           type="button"
-          onClick={() => setShowCreateGameModal(true)}
+          ref={createButtonRef}
+          onClick={handleCreateGameClick}
           disabled={!teamId}
           className={sidebarStyles.createGameButton}
         >
@@ -201,6 +225,11 @@ export const ManageGamesTab: React.FC<ManageGamesTabProps> = ({ teamId }) => {
           </span>
           Create Game
         </button>
+        {showGameLimitWarning && (
+          <p className={sidebarStyles.errorText}>
+            You can have at most {MAX_GAMES} games.
+          </p>
+        )}
       </div>
 
       <div className={sidebarStyles.manageSection}>
