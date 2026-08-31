@@ -7,6 +7,7 @@ import { MAX_PLAYER_NAME_CHARS } from "@/app/constants/playerLimits";
 import { MAX_PLAYER_NUMBER_CHARS } from "@/app/constants/playerLimits";
 import { MAX_PLAYER_POSITION_CHARS } from "@/app/constants/playerLimits";
 import CopyPasteModal from "./CopyPasteModal";
+import ExcelImportModal from "./ExcelImportModal";
 
 import { ParsedPlayer } from "@/app/utils/playerListParser";
 
@@ -34,6 +35,7 @@ export default function AddPlayers({
   playerNameRef,
 }: AddPlayersProps) {
   const [modalOpen, setModalOpen] = useState(false);
+  const [excelModalOpen, setExcelModalOpen] = useState(false);
 
   return (
     <div className={s.addCard}>
@@ -50,7 +52,11 @@ export default function AddPlayers({
             <Clipboard size={14} />
             Copy &amp; paste
           </button>
-          <button type="button" className={s.importButton}>
+          <button
+            type="button"
+            className={s.importButton}
+            onClick={() => setExcelModalOpen(true)}
+          >
             <FileSpreadsheet size={14} />
             Google Sheets/Excel
           </button>
@@ -134,6 +140,12 @@ export default function AddPlayers({
       <CopyPasteModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
+        onPlayersParsed={onPlayersParsed}
+      />
+
+      <ExcelImportModal
+        open={excelModalOpen}
+        onClose={() => setExcelModalOpen(false)}
         onPlayersParsed={onPlayersParsed}
       />
     </div>
