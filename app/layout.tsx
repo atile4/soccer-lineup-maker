@@ -8,6 +8,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { TeamProvider } from "@/context/TeamContext";
 import { GameProvider } from "@/context/GameContext";
 import { PlayerSizeProvider } from "@/context/PlayerSizeContext";
+import { RulesetWarningsProvider } from "@/context/RulesetWarningsContext";
 import { COOKIE_NAME, parseScale } from "@/context/playerSize";
 
 export const metadata: Metadata = {
@@ -45,7 +46,7 @@ export default function RootLayout({
           <TeamProvider>
             <GameProvider>
               <PlayerSizeProvider initialScale={initialScale}>
-                {children}
+                <RulesetWarningsProvider>{children}</RulesetWarningsProvider>
               </PlayerSizeProvider>
             </GameProvider>
           </TeamProvider>
