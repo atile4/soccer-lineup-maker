@@ -90,11 +90,11 @@ export default function DashboardPage() {
 
                 {/* Soccer Field zone — field-first, stacks vertically on mobile */}
                 <div className="flex-1 flex flex-col lg:flex-row lg:items-center lg:justify-center lg:h-full w-full min-w-0 px-2 lg:px-4">
-                  <div className="flex flex-col items-center lg:flex-row lg:items-start gap-3 lg:gap-4 w-full lg:w-auto">
+                  <div className="flex flex-col items-center lg:flex-row lg:items-start lg:h-full gap-3 lg:gap-4 w-full lg:w-auto">
                     {/* Lineup period tabs — above the field on mobile, left on desktop */}
                     <LineupTabs />
 
-                    <div className="flex flex-col items-center lg:flex-row lg:items-start gap-3 lg:gap-4 w-full lg:w-auto">
+                    <div className="flex flex-col items-center lg:flex-row lg:items-start lg:h-full gap-3 lg:gap-4 w-full lg:w-auto">
                       <div className="relative">
                         <FieldSizeControl className="absolute right-full bottom-0 mr-2" />
                         <Field />

@@ -162,6 +162,39 @@ body {
   }
 }
 
+/* ------------------------------------------------------------------ */
+/* Scrollbars — slim, warm-tinted thumb on a transparent track. The    */
+/* app never scrolls as a page (body is overflow-hidden at lg+), so    */
+/* this only affects the internal scroll areas (bench list, sidebars). */
+/* WebKit/Blink pseudo-elements + Firefox scrollbar-* properties.      */
+/* ------------------------------------------------------------------ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-strong);
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong) transparent;
+}
+
 /* Lock the viewport to a single non-scrolling screen only on desktop (lg+).
    Below lg the dashboard is allowed to scroll vertically so stacked content
    (field, bench, tabs) stays reachable instead of being clipped. */
