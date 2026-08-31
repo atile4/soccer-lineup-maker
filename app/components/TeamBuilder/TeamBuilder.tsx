@@ -7,6 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useTeam } from "@/context/TeamContext";
 import { createTeamWithDefaultGame } from "@/services/teams";
 import { createPlayers, NewPlayer } from "@/services/players";
+import { ParsedPlayer } from "@/app/utils/playerListParser";
 import { useRouter } from "next/navigation";
 import TeamDetails from "./TeamDetails";
 import AddPlayers from "./AddPlayers";
@@ -93,6 +94,18 @@ export default function TeamBuilder() {
 
   const handleRemovePlayer = (draftId: string) => {
     setPlayers((prev) => prev.filter((p) => p.draftId !== draftId));
+  };
+
+  const handlePlayersParsed = (parsed: ParsedPlayer[]) => {
+    setPlayers((prev) => [
+      ...prev,
+      ...parsed.map((p) => ({
+        draftId: crypto.randomUUID(),
+        name: p.name,
+        number: p.number,
+        position: p.position,
+      })),
+    ]);
   };
 
   const handleSaveTeam = async () => {
@@ -183,6 +196,7 @@ export default function TeamBuilder() {
               onNumberChange={setNumber}
               onPositionChange={setPosition}
               onAddPlayer={handleAddPlayer}
+              onPlayersParsed={handlePlayersParsed}
               playerNameRef={playerNameRef}
             />
 

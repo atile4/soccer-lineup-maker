@@ -8,6 +8,8 @@ import { MAX_PLAYER_NUMBER_CHARS } from "@/app/constants/playerLimits";
 import { MAX_PLAYER_POSITION_CHARS } from "@/app/constants/playerLimits";
 import CopyPasteModal from "./CopyPasteModal";
 
+import { ParsedPlayer } from "@/app/utils/playerListParser";
+
 type AddPlayersProps = {
   playerName: string;
   number: string;
@@ -16,6 +18,7 @@ type AddPlayersProps = {
   onNumberChange: (value: string) => void;
   onPositionChange: (value: string) => void;
   onAddPlayer: (e: React.FormEvent) => void;
+  onPlayersParsed: (players: ParsedPlayer[]) => void;
   playerNameRef: React.Ref<HTMLInputElement>;
 };
 
@@ -27,6 +30,7 @@ export default function AddPlayers({
   onNumberChange,
   onPositionChange,
   onAddPlayer,
+  onPlayersParsed,
   playerNameRef,
 }: AddPlayersProps) {
   const [modalOpen, setModalOpen] = useState(false);
@@ -128,7 +132,11 @@ export default function AddPlayers({
         </form>
       </div>
 
-      <CopyPasteModal open={modalOpen} onClose={() => setModalOpen(false)} />
+      <CopyPasteModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onPlayersParsed={onPlayersParsed}
+      />
     </div>
   );
 }
