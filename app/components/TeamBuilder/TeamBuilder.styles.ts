@@ -61,8 +61,14 @@ export const teamBuilderStyles = {
   rightCol: "flex flex-col gap-4 min-w-0",
 
   addCard: "bg-surface border border-border rounded-xl shadow-sm p-4",
-  addCardTitle: "text-h3 mb-1",
+  addCardTitle: "text-h3 mb-3",
   addCardHint: "text-caption text-muted mb-3",
+  sectionLabel: "block text-caption font-bold text-muted uppercase tracking-wide mb-2",
+  importBlock: "pb-3 mb-3 border-b border-border",
+  importButtons: "grid grid-cols-1 sm:grid-cols-2 gap-2",
+  importButton:
+    "flex items-center justify-center gap-1.5 px-3 py-2 text-caption font-semibold text-ink bg-surface-subtle border border-border rounded-md hover:bg-paper transition-colors",
+  manualBlock: "",
   addForm:
     "grid grid-cols-2 sm:grid-cols-[1fr_78px_1.2fr_auto] gap-2.5 items-end",
   formField: "flex flex-col gap-1",

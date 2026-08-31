@@ -1,7 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronDown, Users, UserPlus, X } from "lucide-react";
+import {
+  ChevronDown,
+  Clipboard,
+  FileSpreadsheet,
+  Users,
+  UserPlus,
+  X,
+} from "lucide-react";
 import { teamBuilderStyles as s } from "./TeamBuilder.styles";
 import { Division, Gender } from "@/app/types";
 import { useAuth } from "@/context/AuthContext";
@@ -276,77 +283,97 @@ export default function TeamBuilder() {
             {/* Add player */}
             <div className={s.addCard}>
               <h3 className={s.addCardTitle}>Add players</h3>
-              <form onSubmit={handleAddPlayer} className={s.addForm}>
-                <div className={s.formField}>
-                  <label className={s.formLabel}>Name</label>
-                  <div className={s.formInputWrap}>
-                    <input
-                      ref={playerNameRef}
-                      type="text"
-                      value={playerName}
-                      onChange={(e) =>
-                        setPlayerName(
-                          e.target.value.slice(0, MAX_PLAYER_NAME_CHARS),
-                        )
-                      }
-                      maxLength={MAX_PLAYER_NAME_CHARS}
-                      placeholder="e.g. Alex Morgan"
-                      className={s.formInput}
-                    />
-                    <span className={s.formCounter}>
-                      {playerName.length}/{MAX_PLAYER_NAME_CHARS}
-                    </span>
-                  </div>
+
+              {/* Import */}
+              <div className={s.importBlock}>
+                <span className={s.sectionLabel}>Import</span>
+                <div className={s.importButtons}>
+                  <button type="button" className={s.importButton}>
+                    <Clipboard size={14} />
+                    Copy &amp; paste
+                  </button>
+                  <button type="button" className={s.importButton}>
+                    <FileSpreadsheet size={14} />
+                    Through .xls file
+                  </button>
                 </div>
-                <div className={s.formField}>
-                  <label className={s.formLabel}># (optional)</label>
-                  <div className={s.formInputWrap}>
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      value={number}
-                      onChange={(e) =>
-                        setNumber(
-                          e.target.value
-                            .replace(/[^0-9]/g, "")
-                            .slice(0, MAX_PLAYER_NUMBER_CHARS),
-                        )
-                      }
-                      maxLength={MAX_PLAYER_NUMBER_CHARS}
-                      placeholder="00"
-                      className={`${s.formInput} ${s.formInputCenter}`}
-                    />
-                    <span className={s.formCounter}>
-                      {number.length}/{MAX_PLAYER_NUMBER_CHARS}
-                    </span>
+              </div>
+
+              {/* Add manually */}
+              <div className={s.manualBlock}>
+                <span className={s.sectionLabel}>Add manually</span>
+                <form onSubmit={handleAddPlayer} className={s.addForm}>
+                  <div className={s.formField}>
+                    <label className={s.formLabel}>Name</label>
+                    <div className={s.formInputWrap}>
+                      <input
+                        ref={playerNameRef}
+                        type="text"
+                        value={playerName}
+                        onChange={(e) =>
+                          setPlayerName(
+                            e.target.value.slice(0, MAX_PLAYER_NAME_CHARS),
+                          )
+                        }
+                        maxLength={MAX_PLAYER_NAME_CHARS}
+                        placeholder="e.g. Alex Morgan"
+                        className={s.formInput}
+                      />
+                      <span className={s.formCounter}>
+                        {playerName.length}/{MAX_PLAYER_NAME_CHARS}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div className={s.formField}>
-                  <label className={s.formLabel}>Position (optional)</label>
-                  <div className={s.formInputWrap}>
-                    <input
-                      type="text"
-                      value={position}
-                      onChange={(e) =>
-                        setPosition(
-                          e.target.value.slice(0, MAX_PLAYER_POSITION_CHARS),
-                        )
-                      }
-                      maxLength={MAX_PLAYER_POSITION_CHARS}
-                      placeholder="e.g. OMF, DMF, LW"
-                      className={s.formInput}
-                    />
-                    <span className={s.formCounter}>
-                      {position.length}/{MAX_PLAYER_POSITION_CHARS}
-                    </span>
+                  <div className={s.formField}>
+                    <label className={s.formLabel}># (optional)</label>
+                    <div className={s.formInputWrap}>
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        value={number}
+                        onChange={(e) =>
+                          setNumber(
+                            e.target.value
+                              .replace(/[^0-9]/g, "")
+                              .slice(0, MAX_PLAYER_NUMBER_CHARS),
+                          )
+                        }
+                        maxLength={MAX_PLAYER_NUMBER_CHARS}
+                        placeholder="00"
+                        className={`${s.formInput} ${s.formInputCenter}`}
+                      />
+                      <span className={s.formCounter}>
+                        {number.length}/{MAX_PLAYER_NUMBER_CHARS}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <button type="submit" className={s.addButton}>
-                  <span className="inline-flex items-center gap-1.5">
-                    <UserPlus size={14} /> Add
-                  </span>
-                </button>
-              </form>
+                  <div className={s.formField}>
+                    <label className={s.formLabel}>Position (optional)</label>
+                    <div className={s.formInputWrap}>
+                      <input
+                        type="text"
+                        value={position}
+                        onChange={(e) =>
+                          setPosition(
+                            e.target.value.slice(0, MAX_PLAYER_POSITION_CHARS),
+                          )
+                        }
+                        maxLength={MAX_PLAYER_POSITION_CHARS}
+                        placeholder="e.g. OMF, DMF, LW"
+                        className={s.formInput}
+                      />
+                      <span className={s.formCounter}>
+                        {position.length}/{MAX_PLAYER_POSITION_CHARS}
+                      </span>
+                    </div>
+                  </div>
+                  <button type="submit" className={s.addButton}>
+                    <span className="inline-flex items-center gap-1.5">
+                      <UserPlus size={14} /> Add
+                    </span>
+                  </button>
+                </form>
+              </div>
             </div>
 
             {/* Duplicate number warning */}
