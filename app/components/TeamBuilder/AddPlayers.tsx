@@ -52,7 +52,7 @@ export default function AddPlayers({
           </button>
           <button type="button" className={s.importButton}>
             <FileSpreadsheet size={14} />
-            Through .xls file
+            Google Sheets/Excel
           </button>
         </div>
       </div>
@@ -62,73 +62,72 @@ export default function AddPlayers({
         <form onSubmit={onAddPlayer} className={s.addForm}>
           <div className={s.formField}>
             <label className={s.formLabel}>Name</label>
-            <div className={s.formInputWrap}>
-              <input
-                ref={playerNameRef}
-                type="text"
-                value={playerName}
-                onChange={(e) =>
-                  onPlayerNameChange(
-                    e.target.value.slice(0, MAX_PLAYER_NAME_CHARS),
-                  )
-                }
-                maxLength={MAX_PLAYER_NAME_CHARS}
-                placeholder="e.g. Alex Morgan"
-                className={s.formInput}
-              />
-              <span className={s.formCounter}>
-                {playerName.length}/{MAX_PLAYER_NAME_CHARS}
-              </span>
-            </div>
+            <input
+              ref={playerNameRef}
+              type="text"
+              value={playerName}
+              onChange={(e) =>
+                onPlayerNameChange(
+                  e.target.value.slice(0, MAX_PLAYER_NAME_CHARS),
+                )
+              }
+              maxLength={MAX_PLAYER_NAME_CHARS}
+              placeholder="e.g. Alex Morgan"
+              className={s.formInput}
+            />
+            <span className={s.formCounterInline}>
+              {playerName.length}/{MAX_PLAYER_NAME_CHARS}
+            </span>
           </div>
           <div className={s.formField}>
             <label className={s.formLabel}># (optional)</label>
-            <div className={s.formInputWrap}>
-              <input
-                type="text"
-                inputMode="numeric"
-                value={number}
-                onChange={(e) =>
-                  onNumberChange(
-                    e.target.value
-                      .replace(/[^0-9]/g, "")
-                      .slice(0, MAX_PLAYER_NUMBER_CHARS),
-                  )
-                }
-                maxLength={MAX_PLAYER_NUMBER_CHARS}
-                placeholder="00"
-                className={`${s.formInput} ${s.formInputCenter}`}
-              />
-              <span className={s.formCounter}>
-                {number.length}/{MAX_PLAYER_NUMBER_CHARS}
-              </span>
-            </div>
+            <input
+              type="text"
+              inputMode="numeric"
+              value={number}
+              onChange={(e) =>
+                onNumberChange(
+                  e.target.value
+                    .replace(/[^0-9]/g, "")
+                    .slice(0, MAX_PLAYER_NUMBER_CHARS),
+                )
+              }
+              maxLength={MAX_PLAYER_NUMBER_CHARS}
+              placeholder="00"
+              className={`${s.formInput} ${s.formInputCenter}`}
+            />
+            <span className={s.formCounterInline}>
+              {number.length}/{MAX_PLAYER_NUMBER_CHARS}
+            </span>
           </div>
           <div className={s.formField}>
             <label className={s.formLabel}>Position (optional)</label>
-            <div className={s.formInputWrap}>
-              <input
-                type="text"
-                value={position}
-                onChange={(e) =>
-                  onPositionChange(
-                    e.target.value.slice(0, MAX_PLAYER_POSITION_CHARS),
-                  )
-                }
-                maxLength={MAX_PLAYER_POSITION_CHARS}
-                placeholder="e.g. OMF, DMF, LW"
-                className={s.formInput}
-              />
-              <span className={s.formCounter}>
-                {position.length}/{MAX_PLAYER_POSITION_CHARS}
-              </span>
-            </div>
-          </div>
-          <button type="submit" className={s.addButton}>
-            <span className="inline-flex items-center gap-1.5">
-              <UserPlus size={14} /> Add
+            <input
+              type="text"
+              value={position}
+              onChange={(e) =>
+                onPositionChange(
+                  e.target.value.slice(0, MAX_PLAYER_POSITION_CHARS),
+                )
+              }
+              maxLength={MAX_PLAYER_POSITION_CHARS}
+              placeholder="e.g. OMF, DMF, LW"
+              className={s.formInput}
+            />
+            <span className={s.formCounterInline}>
+              {position.length}/{MAX_PLAYER_POSITION_CHARS}
             </span>
-          </button>
+          </div>
+          <div className={s.formField}>
+            <span className={s.formLabel} aria-hidden="true">
+              {"\u00A0"}
+            </span>
+            <button type="submit" className={s.addButton}>
+              <span className="inline-flex items-center gap-1.5">
+                <UserPlus size={14} /> Add
+              </span>
+            </button>
+          </div>
         </form>
       </div>
 
