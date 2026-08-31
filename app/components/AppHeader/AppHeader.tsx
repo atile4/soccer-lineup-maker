@@ -34,7 +34,7 @@ export default function AppHeader({ page = "dash" }: AppHeaderProps) {
     <header className={styles.header.container}>
       <div className={styles.header.inner}>
         <div className={styles.header.layout}>
-          <LogoAndTitle title={"Soccer Lineup Organizer"} />
+          <LogoAndTitle title={"SLO"} />
 
           {loading ? (
             <p>Loading...</p>
