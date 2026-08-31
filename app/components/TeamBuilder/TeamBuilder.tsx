@@ -1,43 +1,20 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  ChevronDown,
-  Clipboard,
-  FileSpreadsheet,
-  Users,
-  UserPlus,
-  X,
-} from "lucide-react";
 import { teamBuilderStyles as s } from "./TeamBuilder.styles";
 import { Division, Gender } from "@/app/types";
 import { useAuth } from "@/context/AuthContext";
 import { useTeam } from "@/context/TeamContext";
 import { createTeamWithDefaultGame } from "@/services/teams";
 import { createPlayers, NewPlayer } from "@/services/players";
-import ColorSwitcher from "@/app/components/ui/ColorSwitcher";
 import { useRouter } from "next/navigation";
-import {
-  MAX_PLAYER_NAME_CHARS,
-  MAX_PLAYER_NUMBER_CHARS,
-  MAX_PLAYER_POSITION_CHARS,
-  MAX_TEAM_NAME_CHARS,
-} from "@/app/constants/playerLimits";
-
-const GENDER_OPTIONS: Gender[] = ["Boys", "Girls", "Coed"];
-
-export const DIVISIONS: Division[] = [
-  "U-8",
-  "U-10",
-  "U-12",
-  "U-14",
-  "U-16",
-  "U-18",
-];
+import TeamDetails from "./TeamDetails";
+import AddPlayers from "./AddPlayers";
+import Roster from "./Roster";
 
 // A player the coach has added to the roster but hasn't saved yet.
 // Only exists in this component's state until "Save team" is clicked.
-type DraftPlayer = {
+export type DraftPlayer = {
   draftId: string; // client-side only, not a DB id
   name: string;
   number: string; // kept as string while editing, parsed to int on save
@@ -92,15 +69,6 @@ export default function TeamBuilder() {
     });
     return Object.keys(counts).filter((n) => counts[n] > 1);
   }, [players]);
-
-  const dupeMessage =
-    duplicateNumbers.length === 1
-      ? `${duplicateNumbers.length} players share #${duplicateNumbers[0]}`
-      : duplicateNumbers.length > 1
-        ? `${duplicateNumbers.length} jersey numbers are used more than once (${duplicateNumbers
-            .map((n) => `#${n}`)
-            .join(", ")})`
-        : "";
 
   const handleAddPlayer = (e: React.FormEvent) => {
     e.preventDefault();
@@ -194,247 +162,35 @@ export default function TeamBuilder() {
 
         <div className={s.grid}>
           {/* Left: team details */}
-          <section className={s.detailsCard}>
-            <h3 className={s.cardTitle}>
-              <span className={s.cardIcon}>
-                <Users size={13} />
-              </span>
-              Team details
-            </h3>
-
-            {/* Jersey preview */}
-            <div className={s.jerseyPreview}>
-              <svg viewBox="0 0 100 90" width="52" height="47">
-                <path
-                  d="M25 10 L10 30 L25 35 L25 80 L75 80 L75 35 L90 30 L75 10 C70 18 60 22 50 22 C40 22 30 18 25 10Z"
-                  fill={color}
-                  stroke="var(--color-ink)"
-                  strokeWidth="3"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <div className="min-w-0">
-                <div className={s.jerseyPreviewName}>
-                  {teamName.trim() || "Your team name"}
-                </div>
-                <div className={s.jerseyPreviewMeta}>
-                  {[division, gender].join(" · ")}
-                </div>
-              </div>
-            </div>
-
-            <label className={s.fieldLabel}>Team name</label>
-            <div className={s.formInputWrap}>
-              <input
-                type="text"
-                value={teamName}
-                onChange={(e) =>
-                  setTeamName(e.target.value.slice(0, MAX_TEAM_NAME_CHARS))
-                }
-                maxLength={MAX_TEAM_NAME_CHARS}
-                placeholder="e.g. Thunderbolts"
-                className={s.textInput}
-              />
-              <span className={s.formCounter}>
-                {teamName.length}/{MAX_TEAM_NAME_CHARS}
-              </span>
-            </div>
-
-            <label className={s.fieldLabel}>Division</label>
-            <div className={s.selectWrapper}>
-              <select
-                value={division}
-                onChange={(e) => setDivision(e.target.value as Division)}
-                className={s.selectInput}
-              >
-                {DIVISIONS.map((d) => (
-                  <option key={d} value={d}>
-                    {d}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown className={s.selectChevron} />
-            </div>
-
-            <label className={s.fieldLabel}>Team</label>
-            <div className={s.segmentedGroup}>
-              {GENDER_OPTIONS.map((g) => (
-                <button
-                  key={g}
-                  type="button"
-                  onClick={() => setGender(g)}
-                  className={`${s.segmentedOption} ${
-                    gender === g
-                      ? s.segmentedOptionActive
-                      : s.segmentedOptionInactive
-                  }`}
-                >
-                  {g}
-                </button>
-              ))}
-            </div>
-
-            <label className={s.fieldLabel}>Jersey color</label>
-            <ColorSwitcher value={color} onChange={setColor} />
-          </section>
+          <TeamDetails
+            teamName={teamName}
+            division={division}
+            gender={gender}
+            color={color}
+            onTeamNameChange={setTeamName}
+            onDivisionChange={setDivision}
+            onGenderChange={setGender}
+            onColorChange={setColor}
+          />
 
           {/* Right: roster */}
           <section className={s.rightCol}>
-            {/* Add player */}
-            <div className={s.addCard}>
-              <h3 className={s.addCardTitle}>Add players</h3>
+            <AddPlayers
+              playerName={playerName}
+              number={number}
+              position={position}
+              onPlayerNameChange={setPlayerName}
+              onNumberChange={setNumber}
+              onPositionChange={setPosition}
+              onAddPlayer={handleAddPlayer}
+              playerNameRef={playerNameRef}
+            />
 
-              {/* Import */}
-              <div className={s.importBlock}>
-                <span className={s.sectionLabel}>Import</span>
-                <div className={s.importButtons}>
-                  <button type="button" className={s.importButton}>
-                    <Clipboard size={14} />
-                    Copy &amp; paste
-                  </button>
-                  <button type="button" className={s.importButton}>
-                    <FileSpreadsheet size={14} />
-                    Through .xls file
-                  </button>
-                </div>
-              </div>
-
-              {/* Add manually */}
-              <div className={s.manualBlock}>
-                <span className={s.sectionLabel}>Add manually</span>
-                <form onSubmit={handleAddPlayer} className={s.addForm}>
-                  <div className={s.formField}>
-                    <label className={s.formLabel}>Name</label>
-                    <div className={s.formInputWrap}>
-                      <input
-                        ref={playerNameRef}
-                        type="text"
-                        value={playerName}
-                        onChange={(e) =>
-                          setPlayerName(
-                            e.target.value.slice(0, MAX_PLAYER_NAME_CHARS),
-                          )
-                        }
-                        maxLength={MAX_PLAYER_NAME_CHARS}
-                        placeholder="e.g. Alex Morgan"
-                        className={s.formInput}
-                      />
-                      <span className={s.formCounter}>
-                        {playerName.length}/{MAX_PLAYER_NAME_CHARS}
-                      </span>
-                    </div>
-                  </div>
-                  <div className={s.formField}>
-                    <label className={s.formLabel}># (optional)</label>
-                    <div className={s.formInputWrap}>
-                      <input
-                        type="text"
-                        inputMode="numeric"
-                        value={number}
-                        onChange={(e) =>
-                          setNumber(
-                            e.target.value
-                              .replace(/[^0-9]/g, "")
-                              .slice(0, MAX_PLAYER_NUMBER_CHARS),
-                          )
-                        }
-                        maxLength={MAX_PLAYER_NUMBER_CHARS}
-                        placeholder="00"
-                        className={`${s.formInput} ${s.formInputCenter}`}
-                      />
-                      <span className={s.formCounter}>
-                        {number.length}/{MAX_PLAYER_NUMBER_CHARS}
-                      </span>
-                    </div>
-                  </div>
-                  <div className={s.formField}>
-                    <label className={s.formLabel}>Position (optional)</label>
-                    <div className={s.formInputWrap}>
-                      <input
-                        type="text"
-                        value={position}
-                        onChange={(e) =>
-                          setPosition(
-                            e.target.value.slice(0, MAX_PLAYER_POSITION_CHARS),
-                          )
-                        }
-                        maxLength={MAX_PLAYER_POSITION_CHARS}
-                        placeholder="e.g. OMF, DMF, LW"
-                        className={s.formInput}
-                      />
-                      <span className={s.formCounter}>
-                        {position.length}/{MAX_PLAYER_POSITION_CHARS}
-                      </span>
-                    </div>
-                  </div>
-                  <button type="submit" className={s.addButton}>
-                    <span className="inline-flex items-center gap-1.5">
-                      <UserPlus size={14} /> Add
-                    </span>
-                  </button>
-                </form>
-              </div>
-            </div>
-
-            {/* Duplicate number warning */}
-            {duplicateNumbers.length > 0 && (
-              <div className={s.dupeWarning}>
-                <span className={s.dupeWarningText}>{dupeMessage}</span>
-              </div>
-            )}
-
-            {/* Roster */}
-            <div className={s.rosterCard}>
-              <div className={s.rosterHeader}>
-                <h3 className={s.rosterTitle}>Roster</h3>
-                <span className={s.rosterCount}>{players.length}</span>
-              </div>
-
-              {players.length === 0 ? (
-                <div className={s.emptyState}>
-                  <div className={s.emptyIcon}>
-                    <Users size={22} />
-                  </div>
-                  <p className={s.emptyTitle}>No players yet</p>
-                  <p className={s.emptySubtitle}>
-                    Add your first player above to start the roster.
-                  </p>
-                </div>
-              ) : (
-                <ul className={s.rosterList}>
-                  {players.map((p) => {
-                    const isDupe =
-                      p.number && duplicateNumbers.includes(p.number);
-                    const name = p.name || "Unnamed player";
-                    return (
-                      <li
-                        key={p.draftId}
-                        className={`${s.rosterRow} ${isDupe ? s.rosterRowDupe : ""}`}
-                      >
-                        <div className={s.numberBadge}>{p.number || "–"}</div>
-                        <div className="flex-1 min-w-0">
-                          <div className={s.rosterName}>{name}</div>
-                          <div className={s.rosterSub}>
-                            {p.number ? `No. ${p.number}` : "No number"}
-                          </div>
-                        </div>
-                        {p.position && (
-                          <span className={s.positionChip}>{p.position}</span>
-                        )}
-                        <button
-                          type="button"
-                          aria-label="Delete player"
-                          className={s.deleteButton}
-                          onClick={() => handleRemovePlayer(p.draftId)}
-                        >
-                          <X size={16} />
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-            </div>
+            <Roster
+              players={players}
+              duplicateNumbers={duplicateNumbers}
+              onRemovePlayer={handleRemovePlayer}
+            />
           </section>
         </div>
       </div>
