@@ -4,13 +4,18 @@ import { FieldPosition } from "@/app/types";
 // Matches the `unique (lineup_id, player_id)` constraint used for upserts.
 const ON_CONFLICT = "lineup_id,player_id";
 
-export async function fetchFieldPositions(
-  lineupId: string,
+// Fetch placements for several lineups at once — used to evaluate ruleset
+// rules that span a whole game (e.g. quarters played per player). One round
+// trip; the per-row "owns_lineup" RLS policy still applies to each lineup.
+export async function fetchFieldPositionsForLineups(
+  lineupIds: string[],
 ): Promise<FieldPosition[]> {
+  if (lineupIds.length === 0) return [];
+
   const { data, error } = await supabase
     .from("field_positions")
     .select("*")
-    .eq("lineup_id", lineupId);
+    .in("lineup_id", lineupIds);
 
   if (error) throw error;
   return data as FieldPosition[];

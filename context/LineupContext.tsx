@@ -10,19 +10,19 @@ import {
   ReactNode,
 } from "react";
 
-import { Player, Placement } from "@/app/types";
+import { Player } from "@/app/types";
 import { fetchPlayers } from "@/services/players";
 import {
-  fetchFieldPositions,
   placePlayerOnField,
   benchPlayer,
   removeFieldPosition,
   benchAllPlayers,
 } from "@/services/fieldPositions";
+import { useGameLineup, type PlacementMap } from "./GameLineupContext";
 
-// Placements are keyed by player_id for O(1) lookups from every surface
-// (sidebar / bench / field).
-type PlacementMap = Record<string, Placement>;
+// Stable identity for "this lineup has no placements", so the derived-buckets
+// memo below doesn't rerun on every render when a period is empty.
+const EMPTY_PLACEMENTS: PlacementMap = Object.freeze({});
 
 interface LineupContextValue {
   players: Player[];
@@ -71,127 +71,113 @@ export function LineupProvider({
   children,
 }: LineupProviderProps) {
   const [players, setPlayers] = useState<Player[]>([]);
-  const [placements, setPlacements] = useState<PlacementMap>({});
-  const [loading, setLoading] = useState(true);
+  const [rosterLoading, setRosterLoading] = useState(true);
 
-  // Load the roster AND hydrate placements for the active lineup together,
-  // in a single effect keyed on both teamId and lineupId.
+  // Placements live in GameLineupContext, which holds every period of the
+  // active game. This provider reads the active period out of that map and
+  // writes back through it, so there is only ever one copy of the data.
+  const {
+    placementsByLineup,
+    loading: placementsLoading,
+    setPlacement,
+    setLineupPlacements,
+    dropPlayer,
+  } = useGameLineup();
+
+  const placements = lineupId
+    ? (placementsByLineup[lineupId] ?? EMPTY_PLACEMENTS)
+    : EMPTY_PLACEMENTS;
+
+  // Load the roster for the active team.
   useEffect(() => {
     if (!teamId) {
       setPlayers([]);
-      setPlacements({});
-      setLoading(false); // nothing to load — no team selected
+      setRosterLoading(false); // nothing to load — no team selected
       return;
     }
 
     let cancelled = false;
-    setLoading(true);
+    setRosterLoading(true);
 
-    const rosterPromise = fetchPlayers(teamId);
-    // if no lineup selected, nothing is placed. Resolve with [] instead of skipping the fetch
-    const placementsPromise = lineupId
-      ? fetchFieldPositions(lineupId)
-      : Promise.resolve([]);
-
-    Promise.all([rosterPromise, placementsPromise])
-      .then(([playerData, positions]) => {
-        if (cancelled) return;
-        setPlayers(playerData);
-        const map: PlacementMap = {};
-        for (const p of positions) {
-          map[p.player_id] = { x: p.x, y: p.y, bench: p.bench };
-        }
-        setPlacements(map);
+    fetchPlayers(teamId)
+      .then((playerData) => {
+        if (!cancelled) setPlayers(playerData);
       })
       .catch((err) => console.error("Failed to load lineup data:", err))
       .finally(() => {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) setRosterLoading(false);
       });
 
     return () => {
       cancelled = true;
     };
-  }, [teamId, lineupId]);
+  }, [teamId]);
 
-  // Warn once per action if there's no lineup to persist to. Without a game,
-  // there's no valid lineup FK, so changes stay local only.
+  // Without a game there's no valid lineup FK, and placements are keyed by
+  // lineup — so there's nowhere to put the change. Drop it with a warning.
   // @TODO Remove this guard once a lineup always exists for the active game.
   const warnNoLineup = () =>
     console.warn(
-      "No active lineup — change applied locally but not persisted. " +
+      "No active lineup — change ignored. " +
         "This resolves once a game/lineup is selected.",
     );
 
   const placeOnField = useCallback(
     (playerId: string, x: number, y: number) => {
-      setPlacements((prev) => ({
-        ...prev,
-        [playerId]: { x, y, bench: false },
-      }));
       if (!lineupId) return warnNoLineup();
+      setPlacement(lineupId, playerId, { x, y, bench: false });
       placePlayerOnField(lineupId, playerId, x, y).catch((err) =>
         console.error("Failed to persist field placement:", err),
       );
     },
-    [lineupId],
+    [lineupId, setPlacement],
   );
 
   const placeOnBench = useCallback(
     (playerId: string) => {
-      setPlacements((prev) => ({
-        ...prev,
-        [playerId]: { x: null, y: null, bench: true },
-      }));
       if (!lineupId) return warnNoLineup();
+      setPlacement(lineupId, playerId, { x: null, y: null, bench: true });
       benchPlayer(lineupId, playerId).catch((err) =>
         console.error("Failed to persist bench placement:", err),
       );
     },
-    [lineupId],
+    [lineupId, setPlacement],
   );
 
   const unplace = useCallback(
     (playerId: string) => {
-      setPlacements((prev) => {
-        if (!(playerId in prev)) return prev;
-        const next = { ...prev };
-        delete next[playerId];
-        return next;
-      });
       if (!lineupId) return warnNoLineup();
+      setPlacement(lineupId, playerId, null);
       removeFieldPosition(lineupId, playerId).catch((err) =>
         console.error("Failed to remove field placement:", err),
       );
     },
-    [lineupId],
+    [lineupId, setPlacement],
   );
 
   const benchAll = useCallback(() => {
-    const ids = players.map((p) => p.id);
-    setPlacements(() => {
-      const next: PlacementMap = {};
-      for (const id of ids) next[id] = { x: null, y: null, bench: true };
-      return next;
-    });
     if (!lineupId) return warnNoLineup();
+    const ids = players.map((p) => p.id);
+    const next: PlacementMap = {};
+    for (const id of ids) next[id] = { x: null, y: null, bench: true };
+    setLineupPlacements(lineupId, next);
     benchAllPlayers(lineupId, ids).catch((err) =>
       console.error("Failed to bench all players:", err),
     );
-  }, [players, lineupId]);
+  }, [players, lineupId, setLineupPlacements]);
 
   const applyPlayerUpdate = useCallback((updated: Player) => {
     setPlayers((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
   }, []);
 
-  const removePlayer = useCallback((playerId: string) => {
-    setPlayers((prev) => prev.filter((p) => p.id !== playerId));
-    setPlacements((prev) => {
-      if (!(playerId in prev)) return prev;
-      const next = { ...prev };
-      delete next[playerId];
-      return next;
-    });
-  }, []);
+  const removePlayer = useCallback(
+    (playerId: string) => {
+      setPlayers((prev) => prev.filter((p) => p.id !== playerId));
+      // The DB cascades the delete across every lineup, so clear them all.
+      dropPlayer(playerId);
+    },
+    [dropPlayer],
+  );
 
   const addPlayer = useCallback((player: Player) => {
     setPlayers((prev) => [...prev, player]);
@@ -216,7 +202,7 @@ export function LineupProvider({
 
   const value: LineupContextValue = {
     players,
-    loading,
+    loading: rosterLoading || placementsLoading,
     unplacedPlayers,
     benchedPlayers,
     fieldedPlayers,

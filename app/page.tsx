@@ -15,6 +15,7 @@ import { HTML5toTouch } from "rdndmb-html5-to-touch";
 import { CustomDragLayer } from "./components/dnd/CustomDragLayer";
 
 // context
+import { GameLineupProvider } from "@/context/GameLineupContext";
 import { LineupProvider } from "@/context/LineupContext";
 import { PlayerInfoProvider } from "@/context/PlayerInfoContext";
 
@@ -56,64 +57,66 @@ export default function DashboardPage() {
       ) : (
         <DndProvider backend={MultiBackend} options={HTML5toTouch}>
           <CustomDragLayer />
-          <LineupProvider
-            teamId={currentTeamId}
-            lineupId={currentGame?.current_lineup_id ?? null}
-          >
-            <PlayerInfoProvider>
-              {/* Mobile-only toolbar to open each drawer */}
-              <div className="lg:hidden flex items-center gap-2 px-4 py-2 border-b border-[#e8e0c8] bg-[#fdf8e3]">
-                <button
-                  type="button"
-                  onClick={() => setManageOpen(true)}
-                  className="flex items-center gap-1.5 rounded-lg border border-[#e8e0c8] bg-[#fefcf3] px-3 py-1.5 text-sm font-semibold text-gray-700 shadow-sm hover:bg-[#f5edd4] transition-colors"
-                >
-                  <PanelLeft className="h-4 w-4" />
-                  Manage
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setPlayersOpen(true)}
-                  className="flex items-center gap-1.5 rounded-lg border border-[#e8e0c8] bg-[#fefcf3] px-3 py-1.5 text-sm font-semibold text-gray-700 shadow-sm hover:bg-[#f5edd4] transition-colors"
-                >
-                  <Users className="h-4 w-4" />
-                  Players
-                </button>
-              </div>
-
-              <main className="flex-1 flex flex-col lg:flex-row lg:overflow-hidden py-4 gap-4">
-                <ManageSidebar
-                  teamId={currentTeamId}
-                  open={manageOpen}
-                  onOpenChange={setManageOpen}
-                  isDesktop={isDesktop}
-                />
-
-                {/* Soccer Field zone — field-first, stacks vertically on mobile */}
-                <div className="flex-1 flex flex-col lg:flex-row lg:items-center lg:justify-center lg:h-full w-full min-w-0 px-2 lg:px-4">
-                  <div className="flex flex-col items-center lg:flex-row lg:items-start lg:h-full gap-3 lg:gap-4 w-full lg:w-auto">
-                    {/* Lineup period tabs — above the field on mobile, left on desktop */}
-                    <LineupTabs />
-
-                    <div className="flex flex-col items-center lg:flex-row lg:items-start lg:h-full gap-3 lg:gap-4 w-full lg:w-auto">
-                      <div className="relative">
-                        <RulesetWarning />
-                        <FieldSizeControl className="absolute right-full bottom-0 mr-2" />
-                        <Field />
-                      </div>
-                      <Bench />
-                    </div>
-                  </div>
+          <GameLineupProvider>
+            <LineupProvider
+              teamId={currentTeamId}
+              lineupId={currentGame?.current_lineup_id ?? null}
+            >
+              <PlayerInfoProvider>
+                {/* Mobile-only toolbar to open each drawer */}
+                <div className="lg:hidden flex items-center gap-2 px-4 py-2 border-b border-[#e8e0c8] bg-[#fdf8e3]">
+                  <button
+                    type="button"
+                    onClick={() => setManageOpen(true)}
+                    className="flex items-center gap-1.5 rounded-lg border border-[#e8e0c8] bg-[#fefcf3] px-3 py-1.5 text-sm font-semibold text-gray-700 shadow-sm hover:bg-[#f5edd4] transition-colors"
+                  >
+                    <PanelLeft className="h-4 w-4" />
+                    Manage
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPlayersOpen(true)}
+                    className="flex items-center gap-1.5 rounded-lg border border-[#e8e0c8] bg-[#fefcf3] px-3 py-1.5 text-sm font-semibold text-gray-700 shadow-sm hover:bg-[#f5edd4] transition-colors"
+                  >
+                    <Users className="h-4 w-4" />
+                    Players
+                  </button>
                 </div>
 
-                <PlayerSidebar
-                  open={playersOpen}
-                  onOpenChange={setPlayersOpen}
-                  isDesktop={isDesktop}
-                />
-              </main>
-            </PlayerInfoProvider>
-          </LineupProvider>
+                <main className="flex-1 flex flex-col lg:flex-row lg:overflow-hidden py-4 gap-4">
+                  <ManageSidebar
+                    teamId={currentTeamId}
+                    open={manageOpen}
+                    onOpenChange={setManageOpen}
+                    isDesktop={isDesktop}
+                  />
+
+                  {/* Soccer Field zone — field-first, stacks vertically on mobile */}
+                  <div className="flex-1 flex flex-col lg:flex-row lg:items-center lg:justify-center lg:h-full w-full min-w-0 px-2 lg:px-4">
+                    <div className="flex flex-col items-center lg:flex-row lg:items-start lg:h-full gap-3 lg:gap-4 w-full lg:w-auto">
+                      {/* Lineup period tabs — above the field on mobile, left on desktop */}
+                      <LineupTabs />
+
+                      <div className="flex flex-col items-center lg:flex-row lg:items-start lg:h-full gap-3 lg:gap-4 w-full lg:w-auto">
+                        <div className="relative">
+                          <RulesetWarning />
+                          <FieldSizeControl className="absolute right-full bottom-0 mr-2" />
+                          <Field />
+                        </div>
+                        <Bench />
+                      </div>
+                    </div>
+                  </div>
+
+                  <PlayerSidebar
+                    open={playersOpen}
+                    onOpenChange={setPlayersOpen}
+                    isDesktop={isDesktop}
+                  />
+                </main>
+              </PlayerInfoProvider>
+            </LineupProvider>
+          </GameLineupProvider>
         </DndProvider>
       )}
     </div>
