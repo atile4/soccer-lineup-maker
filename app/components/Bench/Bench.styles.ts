@@ -28,6 +28,15 @@ export const benchStyles = {
   playerWrapper:
     "flex-shrink-0 rounded-lg bg-surface-subtle py-1 px-1 hover:bg-border transition-colors",
 
+  // Placeholder tokens shown while the roster is still loading. They carry the
+  // same --tok / --tok-name bases as the bench PlayerToken variant so the
+  // skeletons occupy the same footprint as the real players (scale applied
+  // inline, matching PlayerToken).
+  skeletonWrapper:
+    "flex-shrink-0 rounded-lg py-1 px-1 flex flex-col items-center gap-0.5 [--tok:36px] [--tok-name:10px]",
+  skeletonJersey: "rounded-md bg-border animate-pulse",
+  skeletonName: "rounded bg-border animate-pulse",
+
   // Collapse grip — desktop only; the mobile bench stays open as a drop target.
   gripButton:
     "hidden lg:flex self-center -mr-3 z-10 flex-shrink-0 w-6 h-14 rounded-md bg-muted hover:bg-ink-2 border border-border-strong shadow-sm items-center justify-center transition-colors",

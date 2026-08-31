@@ -11,4 +11,12 @@ export const fieldStyles = {
 
   // A player token positioned on the pitch, centered on its (x, y) point.
   player: "absolute z-10 -translate-x-1/2 -translate-y-1/2",
+
+  // Shown over the pitch while the roster/placements are still loading.
+  loadingOverlay:
+    "absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 rounded-lg bg-ink/25",
+  loadingSpinner:
+    "h-10 w-10 animate-spin rounded-full border-4 border-white/40 border-t-white",
+  loadingText:
+    "text-caption font-semibold text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.9)]",
 };

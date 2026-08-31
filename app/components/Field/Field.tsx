@@ -13,7 +13,7 @@ const clamp = (n: number) => Math.max(0, Math.min(100, n));
 // The soccer field: a drop target that converts a drop point into percentage
 // coordinates, plus the on-field player tokens layered on top of the image.
 export function Field() {
-  const { fieldedPlayers, placements, placeOnField } = useLineup();
+  const { fieldedPlayers, placements, placeOnField, loading } = useLineup();
   const fieldRef = useRef<HTMLDivElement | null>(null);
 
   const [{ isOver }, drop] = useDrop(
@@ -55,6 +55,13 @@ export function Field() {
         draggable={false}
         priority
       />
+
+      {loading && (
+        <div className={styles.loadingOverlay} role="status" aria-live="polite">
+          <div className={styles.loadingSpinner} />
+          <p className={styles.loadingText}>Loading field...</p>
+        </div>
+      )}
 
       {fieldedPlayers.map((player) => {
         const placement = placements[player.id];
