@@ -38,7 +38,14 @@ export const playerInfoPopoverStyles = {
 
   jerseyWrapper: "flex-shrink-0",
 
+  jerseyContainer: "relative inline-block",
+
   jerseyPath: "stroke-ink stroke-[3] [stroke-linejoin:round]",
+
+  numberText: "cursor-pointer hover:opacity-80 transition-opacity",
+
+  numberInput:
+    "absolute inset-0 w-full h-full bg-transparent text-center font-bold text-ink focus:outline-none pointer-events-auto",
 
   notesTextarea:
     "mt-3 w-full h-20 resize-none rounded-md border border-border bg-surface p-2 text-caption text-ink-2 placeholder:text-faint focus:outline-none focus:ring-2 focus:ring-accent-border focus:border-accent",

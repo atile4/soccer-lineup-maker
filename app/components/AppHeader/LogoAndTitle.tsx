@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import { appHeaderStyles as styles } from "./appHeader.styles";
 
 interface LogoAndTitleProps {
@@ -9,8 +11,15 @@ interface LogoAndTitleProps {
 export default function LogoAndTitle({
   title = "Soccer Lineup Organizer",
 }: LogoAndTitleProps) {
+  const router = useRouter();
+
   return (
-    <div className={styles.centerSection.wrapper}>
+    <button
+      type="button"
+      onClick={() => router.push("/")}
+      className={`${styles.centerSection.wrapper} cursor-pointer transition-opacity text-left`}
+      aria-label="Go to home page"
+    >
       <div className={styles.logo.container}>
         <svg
           className={styles.logo.icon}
@@ -30,6 +39,6 @@ export default function LogoAndTitle({
       <div className="text-center min-w-0">
         <h1 className={styles.text.title}>{title}</h1>
       </div>
-    </div>
+    </button>
   );
 }

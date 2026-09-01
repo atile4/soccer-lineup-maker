@@ -12,6 +12,22 @@ import { useIsDesktop } from "./hooks/useIsDesktop";
 import { DndProvider } from "react-dnd";
 import { MultiBackend } from "react-dnd-multi-backend";
 import { HTML5toTouch } from "rdndmb-html5-to-touch";
+import type { MultiBackendOptions, MultiBackendPipelineStep } from "dnd-multi-backend";
+
+// Add a touch-start delay so the browser can distinguish scroll gestures from
+// drag gestures. Without this, the touch backend immediately captures the
+// touchstart and interprets any movement as a drag — making it impossible to
+// scroll horizontally through the bench (or sidebar) on mobile.
+const dndOptions: MultiBackendOptions = {
+  backends: HTML5toTouch.backends.map<MultiBackendPipelineStep>((b) =>
+    b.id === "touch"
+      ? {
+        ...b,
+        options: { enableMouseEvents: true, delayTouchStart: 20 },
+      }
+      : b,
+  ),
+};
 import { CustomDragLayer } from "./components/dnd/CustomDragLayer";
 
 // context
@@ -53,7 +69,7 @@ export default function DashboardPage() {
           <p className="text-sm text-gray-400">Loading...</p>
         </div>
       ) : (
-        <DndProvider backend={MultiBackend} options={HTML5toTouch}>
+        <DndProvider backend={MultiBackend} options={dndOptions}>
           <CustomDragLayer />
           <LineupProvider
             teamId={currentTeamId}
@@ -90,11 +106,11 @@ export default function DashboardPage() {
 
                 {/* Soccer Field zone — field-first, stacks vertically on mobile */}
                 <div className="flex-1 flex flex-col lg:flex-row lg:items-center lg:justify-center lg:h-full w-full min-w-0 px-2 lg:px-4">
-                  <div className="flex flex-col items-center lg:flex-row lg:items-start gap-3 lg:gap-4 w-full lg:w-auto">
+                  <div className="flex flex-col items-center lg:flex-row lg:items-start lg:h-full gap-3 lg:gap-4 w-full lg:w-auto">
                     {/* Lineup period tabs — above the field on mobile, left on desktop */}
                     <LineupTabs />
 
-                    <div className="flex flex-col items-center lg:flex-row lg:items-start gap-3 lg:gap-4 w-full lg:w-auto">
+                    <div className="flex flex-col items-center lg:flex-row lg:items-start lg:h-full gap-3 lg:gap-4 w-full lg:w-auto">
                       <div className="relative">
                         <FieldSizeControl className="absolute right-full bottom-0 mr-2" />
                         <Field />

@@ -13,9 +13,9 @@ export default function AboutPage() {
           <h1 className={s.title}>About</h1>
           <p className={s.subtitle}>
             Hi, my name is {"<atile>"}. Currently, {"I'm"} a 2nd year computer
-            science student at UC Irvine, and a little over 3 years under my
+            science student at UC Irvine, and have a little over 3 years under my
             belt coaching U8, U10, and U12 AYSO teams. More relevantly, {"I'm"}{" "}
-            the developer behind this website, SLO.
+            the developer behind SLO.
           </p>
           <p className={s.subtitle}>
             I built SLO as a lineup-building tool for soccer coaches,
@@ -26,9 +26,9 @@ export default function AboutPage() {
           </p>
           <p className={s.subtitle}>
             Currently, Soccer Lineup Organizer is still a work in progress.
-            Alongside prepping for jobs and studying for school, updates may be
-            slow. Even so, I hope to make SLO the best I can make it be, and I
-            hope you can be patient with me as I work on it.
+            Alongside prepping for internships and studying for school, updates may be
+            slow. Even so, I hope to make SLO the best it can be, and I
+            hope you'll be patient with me.
           </p>
           <p className={s.subtitle}>
             If you have any questions, comments, or concerns, feel free to reach
