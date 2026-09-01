@@ -63,8 +63,6 @@ export function DraggablePlayer({
       style={{
         opacity: isDragging ? 0.4 : 1,
         cursor: "grab",
-        // Prevent a touch-drag gesture from scrolling the page instead.
-        touchAction: "none",
         ...style,
       }}
       onClick={onClick}

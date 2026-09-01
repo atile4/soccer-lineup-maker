@@ -19,7 +19,7 @@ export const benchStyles = {
     "text-overline text-muted text-center flex-shrink-0 mb-0 mr-2 lg:mb-2 lg:mr-0",
 
   // Below lg: horizontal scrolling row. At lg+: vertical scrolling list.
-  list: "flex flex-row gap-2 overflow-x-auto flex-1 min-h-0 pr-0.5 lg:flex-col lg:gap-0 lg:space-y-2 lg:overflow-x-visible lg:overflow-y-auto",
+  list: "flex flex-row gap-2 overflow-x-auto flex-1 min-h-0 pr-0.5 touch-pan-x lg:flex-col lg:gap-0 lg:space-y-2 lg:overflow-x-visible lg:overflow-y-auto",
 
   emptyText:
     "text-caption text-muted text-center px-1 lg:mt-2",

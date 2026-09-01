@@ -12,6 +12,22 @@ import { useIsDesktop } from "./hooks/useIsDesktop";
 import { DndProvider } from "react-dnd";
 import { MultiBackend } from "react-dnd-multi-backend";
 import { HTML5toTouch } from "rdndmb-html5-to-touch";
+import type { MultiBackendOptions, MultiBackendPipelineStep } from "dnd-multi-backend";
+
+// Add a touch-start delay so the browser can distinguish scroll gestures from
+// drag gestures. Without this, the touch backend immediately captures the
+// touchstart and interprets any movement as a drag — making it impossible to
+// scroll horizontally through the bench (or sidebar) on mobile.
+const dndOptions: MultiBackendOptions = {
+  backends: HTML5toTouch.backends.map<MultiBackendPipelineStep>((b) =>
+    b.id === "touch"
+      ? {
+        ...b,
+        options: { enableMouseEvents: true, delayTouchStart: 20 },
+      }
+      : b,
+  ),
+};
 import { CustomDragLayer } from "./components/dnd/CustomDragLayer";
 
 // context
@@ -53,7 +69,7 @@ export default function DashboardPage() {
           <p className="text-sm text-gray-400">Loading...</p>
         </div>
       ) : (
-        <DndProvider backend={MultiBackend} options={HTML5toTouch}>
+        <DndProvider backend={MultiBackend} options={dndOptions}>
           <CustomDragLayer />
           <LineupProvider
             teamId={currentTeamId}
