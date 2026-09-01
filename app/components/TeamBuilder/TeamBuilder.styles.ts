@@ -107,10 +107,17 @@ export const teamBuilderStyles = {
   rosterRowDupe: "bg-danger-fill ring-1 ring-inset ring-danger-border",
   numberBadge:
     "w-9 h-9 rounded-full flex items-center justify-center text-body-sm font-bold flex-shrink-0 bg-surface-subtle text-ink",
-  rosterName: "text-body-sm font-semibold text-ink truncate",
+  rosterName: "text-body-sm font-semibold text-ink truncate cursor-text",
   rosterSub: "text-caption text-muted mt-0.5",
   positionChip:
     "text-caption font-bold text-accent bg-surface-subtle px-2.5 py-1 rounded-full flex-shrink-0",
+  editButton:
+    "w-8 h-8 flex items-center justify-center text-muted rounded-md hover:bg-surface-subtle hover:text-ink transition-colors flex-shrink-0",
+  editInputWrap: "flex-1 min-w-0",
+  editInput:
+    "w-full px-2 py-1 text-body-sm text-ink bg-surface border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-accent-border focus:border-accent",
+  editInputSmall:
+    "w-7 px-2 py-1 text-body-sm text-ink bg-surface border border-border rounded-md text-center focus:outline-none focus:ring-2 focus:ring-accent-border focus:border-accent",
   deleteButton:
     "w-8 h-8 flex items-center justify-center text-muted rounded-md hover:bg-danger-fill hover:text-danger transition-colors flex-shrink-0",
 

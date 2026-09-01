@@ -1,28 +1,77 @@
 "use client";
 
-import { Users, X } from "lucide-react";
+import { useState } from "react";
+import { Pencil, X } from "lucide-react";
 import { teamBuilderStyles as s } from "./TeamBuilder.styles";
 import type { DraftPlayer } from "./TeamBuilder";
+import {
+  MAX_PLAYER_NAME_CHARS,
+  MAX_PLAYER_NUMBER_CHARS,
+  MAX_PLAYER_POSITION_CHARS,
+} from "@/app/constants/playerLimits";
+
+type EditField = "name" | "number" | "position";
 
 type RosterProps = {
   players: DraftPlayer[];
   duplicateNumbers: string[];
+  onUpdatePlayer: (
+    draftId: string,
+    updates: Partial<Pick<DraftPlayer, "name" | "number" | "position">>,
+  ) => void;
   onRemovePlayer: (draftId: string) => void;
 };
 
 export default function Roster({
   players,
   duplicateNumbers,
+  onUpdatePlayer,
   onRemovePlayer,
 }: RosterProps) {
+  const [editingDraftId, setEditingDraftId] = useState<string | null>(null);
+  const [editingField, setEditingField] = useState<EditField | null>(null);
+  const [draftValue, setDraftValue] = useState("");
+
   const dupeMessage =
     duplicateNumbers.length === 1
       ? `${duplicateNumbers.length} players share #${duplicateNumbers[0]}`
       : duplicateNumbers.length > 1
         ? `${duplicateNumbers.length} jersey numbers are used more than once (${duplicateNumbers
-            .map((n) => `#${n}`)
-            .join(", ")})`
+          .map((n) => `#${n}`)
+          .join(", ")})`
         : "";
+
+  const beginEdit = (draftId: string, field: EditField, currentValue: string) => {
+    setEditingDraftId(draftId);
+    setEditingField(field);
+    setDraftValue(currentValue);
+  };
+
+  const commitEdit = (draftId: string) => {
+    if (!editingField) return;
+    onUpdatePlayer(draftId, { [editingField]: draftValue.trim() });
+    cancelEdit();
+  };
+
+  const cancelEdit = () => {
+    setEditingDraftId(null);
+    setEditingField(null);
+    setDraftValue("");
+  };
+
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    draftId: string,
+  ) => {
+    if (e.key === "Enter") {
+      commitEdit(draftId);
+    } else if (e.key === "Escape") {
+      cancelEdit();
+    }
+  };
+
+  const isEditing = (draftId: string, field: EditField) =>
+    editingDraftId === draftId && editingField === field;
 
   return (
     <>
@@ -41,7 +90,7 @@ export default function Roster({
         {players.length === 0 ? (
           <div className={s.emptyState}>
             <div className={s.emptyIcon}>
-              <Users size={22} />
+              <Pencil size={22} />
             </div>
             <p className={s.emptyTitle}>No players yet</p>
             <p className={s.emptySubtitle}>
@@ -58,16 +107,98 @@ export default function Roster({
                   key={p.draftId}
                   className={`${s.rosterRow} ${isDupe ? s.rosterRowDupe : ""}`}
                 >
-                  <div className={s.numberBadge}>{p.number || "–"}</div>
-                  <div className="flex-1 min-w-0">
-                    <div className={s.rosterName}>{name}</div>
-                    <div className={s.rosterSub}>
-                      {p.number ? `No. ${p.number}` : "No number"}
-                    </div>
-                  </div>
-                  {p.position && (
-                    <span className={s.positionChip}>{p.position}</span>
+                  {/* Number badge — editable on click */}
+                  {isEditing(p.draftId, "number") ? (
+                    <input
+                      autoFocus
+                      value={draftValue}
+                      onChange={(e) =>
+                        setDraftValue(
+                          e.target.value
+                            .replace(/\D/g, "")
+                            .slice(0, MAX_PLAYER_NUMBER_CHARS),
+                        )
+                      }
+                      onKeyDown={(e) => handleKeyDown(e, p.draftId)}
+                      onBlur={() => commitEdit(p.draftId)}
+                      className={s.editInputSmall}
+                      maxLength={MAX_PLAYER_NUMBER_CHARS}
+                      aria-label="Jersey number"
+                    />
+                  ) : (
+                    <button
+                      type="button"
+                      className={s.numberBadge}
+                      onClick={() => beginEdit(p.draftId, "number", p.number)}
+                      aria-label={`Edit number ${p.number || ""}`}
+                    >
+                      {p.number || "–"}
+                    </button>
                   )}
+
+                  {/* Name — editable on click */}
+                  <div className={s.editInputWrap}>
+                    {isEditing(p.draftId, "name") ? (
+                      <input
+                        autoFocus
+                        value={draftValue}
+                        onChange={(e) =>
+                          setDraftValue(
+                            e.target.value.slice(0, MAX_PLAYER_NAME_CHARS),
+                          )
+                        }
+                        onKeyDown={(e) => handleKeyDown(e, p.draftId)}
+                        onBlur={() => commitEdit(p.draftId)}
+                        className={s.editInput}
+                        maxLength={MAX_PLAYER_NAME_CHARS}
+                        aria-label="Player name"
+                      />
+                    ) : (
+                      <div
+                        className={s.rosterName}
+                        onClick={() => beginEdit(p.draftId, "name", p.name)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            beginEdit(p.draftId, "name", p.name);
+                          }
+                        }}
+                      >
+                        {name}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Position — editable chip */}
+                  {isEditing(p.draftId, "position") ? (
+                    <input
+                      autoFocus
+                      value={draftValue}
+                      onChange={(e) =>
+                        setDraftValue(
+                          e.target.value.slice(0, MAX_PLAYER_POSITION_CHARS),
+                        )
+                      }
+                      onKeyDown={(e) => handleKeyDown(e, p.draftId)}
+                      onBlur={() => commitEdit(p.draftId)}
+                      className={s.editInput}
+                      style={{ width: "4rem" }}
+                      maxLength={MAX_PLAYER_POSITION_CHARS}
+                      aria-label="Player position"
+                    />
+                  ) : (
+                    <button
+                      type="button"
+                      className={s.positionChip}
+                      onClick={() => beginEdit(p.draftId, "position", p.position)}
+                      aria-label={`Edit position ${p.position || ""}`}
+                    >
+                      {p.position || "–"}
+                    </button>
+                  )}
+
                   <button
                     type="button"
                     aria-label="Delete player"

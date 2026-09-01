@@ -92,6 +92,15 @@ export default function TeamBuilder() {
     playerNameRef.current?.focus();
   };
 
+  const handleUpdatePlayer = (
+    draftId: string,
+    updates: Partial<Pick<DraftPlayer, "name" | "number" | "position">>,
+  ) => {
+    setPlayers((prev) =>
+      prev.map((p) => (p.draftId === draftId ? { ...p, ...updates } : p)),
+    );
+  };
+
   const handleRemovePlayer = (draftId: string) => {
     setPlayers((prev) => prev.filter((p) => p.draftId !== draftId));
   };
@@ -203,6 +212,7 @@ export default function TeamBuilder() {
             <Roster
               players={players}
               duplicateNumbers={duplicateNumbers}
+              onUpdatePlayer={handleUpdatePlayer}
               onRemovePlayer={handleRemovePlayer}
             />
           </section>
