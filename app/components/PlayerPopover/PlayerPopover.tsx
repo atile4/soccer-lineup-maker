@@ -12,6 +12,7 @@ import {
   MAX_PLAYER_NAME_CHARS,
   MAX_PLAYER_POSITION_CHARS,
 } from "@/app/constants/playerLimits";
+import { numberColorFor } from "@/app/utils/color";
 
 interface PlayerInfoPopoverProps {
   player: Player;
@@ -270,7 +271,7 @@ export default function PlayerInfoPopover({
 
             {/* Jersey badge — same shape as PlayerToken, sized down */}
             <div className={s.jerseyWrapper}>
-              <svg viewBox="0 0 100 90" width="44" height="40">
+              <svg viewBox="0 0 100 90" width="66" height="60">
                 <path
                   d="M25 10 L10 30 L25 35 L25 80 L75 80 L75 35 L90 30 L75 10 C70 18 60 22 50 22 C40 22 30 18 25 10Z"
                   fill={currentTeam?.color ?? "#7C3AED"}
@@ -282,7 +283,7 @@ export default function PlayerInfoPopover({
                   textAnchor="middle"
                   fontSize="26"
                   fontWeight="bold"
-                  fill="white"
+                  fill={numberColorFor(currentTeam?.color ?? "#7C3AED")}
                   fontFamily="Arial, sans-serif"
                 >
                   {player.number}
