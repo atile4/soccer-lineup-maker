@@ -12,9 +12,17 @@ import {
 
 type EditField = "name" | "number" | "position";
 
+function isLight(hex: string): boolean {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return (r * 299 + g * 587 + b * 114) / 1000 > 150;
+}
+
 type RosterProps = {
   players: DraftPlayer[];
   duplicateNumbers: string[];
+  color: string;
   onUpdatePlayer: (
     draftId: string,
     updates: Partial<Pick<DraftPlayer, "name" | "number" | "position">>,
@@ -25,6 +33,7 @@ type RosterProps = {
 export default function Roster({
   players,
   duplicateNumbers,
+  color,
   onUpdatePlayer,
   onRemovePlayer,
 }: RosterProps) {
@@ -129,6 +138,7 @@ export default function Roster({
                     <button
                       type="button"
                       className={s.numberBadge}
+                      style={{ backgroundColor: color, color: isLight(color) ? "#1a1a1a" : "#ffffff" }}
                       onClick={() => beginEdit(p.draftId, "number", p.number)}
                       aria-label={`Edit number ${p.number || ""}`}
                     >

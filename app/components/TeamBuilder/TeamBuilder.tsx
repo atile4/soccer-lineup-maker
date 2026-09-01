@@ -212,6 +212,7 @@ export default function TeamBuilder() {
             <Roster
               players={players}
               duplicateNumbers={duplicateNumbers}
+              color={color}
               onUpdatePlayer={handleUpdatePlayer}
               onRemovePlayer={handleRemovePlayer}
             />
