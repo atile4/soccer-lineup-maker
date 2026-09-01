@@ -11,6 +11,7 @@ import DeletePlayerModal from "./DeletePlayerModal";
 import {
   MAX_PLAYER_NAME_CHARS,
   MAX_PLAYER_POSITION_CHARS,
+  MAX_PLAYER_NUMBER_CHARS,
 } from "@/app/constants/playerLimits";
 import { numberColorFor } from "@/app/utils/color";
 
@@ -25,7 +26,7 @@ interface PlayerInfoPopoverProps {
 const GAP = 8; // space between the anchor and the popover
 const MARGIN = 8; // keep the popover this far from the viewport edges
 
-type EditableField = "name" | "position";
+type EditableField = "name" | "position" | "number";
 
 export default function PlayerInfoPopover({
   player,
@@ -45,6 +46,7 @@ export default function PlayerInfoPopover({
   const [editingField, setEditingField] = useState<EditableField | null>(null);
   const [nameDraft, setNameDraft] = useState(player.name);
   const [positionDraft, setPositionDraft] = useState(player.position);
+  const [numberDraft, setNumberDraft] = useState(String(player.number));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -68,9 +70,10 @@ export default function PlayerInfoPopover({
   useEffect(() => {
     setNameDraft(player.name);
     setPositionDraft(player.position);
+    setNumberDraft(String(player.number));
     setEditingField(null);
     setError(null);
-  }, [player.id, player.name, player.position]);
+  }, [player.id, player.name, player.position, player.number]);
 
   useLayoutEffect(() => {
     const popover = popoverRef.current;
@@ -107,6 +110,7 @@ export default function PlayerInfoPopover({
           setEditingField(null);
           setNameDraft(player.name);
           setPositionDraft(player.position);
+          setNumberDraft(String(player.number));
         } else {
           onClose();
         }
@@ -114,15 +118,37 @@ export default function PlayerInfoPopover({
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [onClose, editingField, confirmingDelete, player.name, player.position]);
+  }, [onClose, editingField, confirmingDelete, player.name, player.position, player.number]);
 
   const handleSave = async (field: EditableField) => {
-    const draft = field === "name" ? nameDraft.trim() : positionDraft.trim();
-    const original = field === "name" ? player.name : player.position;
+    let draft: string;
+    let original: string;
+
+    if (field === "name") {
+      draft = nameDraft.trim();
+      original = player.name;
+    } else if (field === "position") {
+      draft = positionDraft.trim();
+      original = player.position;
+    } else {
+      draft = numberDraft.trim();
+      original = String(player.number);
+    }
 
     if (field === "name" && !draft) {
       setError("Name can't be empty");
       return;
+    }
+
+    if (field === "number") {
+      if (!draft) {
+        setError("Number can't be empty");
+        return;
+      }
+      if (!/^\d{1,2}$/.test(draft)) {
+        setError("Number must be 1-2 digits");
+        return;
+      }
     }
 
     if (draft === original) {
@@ -133,7 +159,8 @@ export default function PlayerInfoPopover({
     setSaving(true);
     setError(null);
     try {
-      const updated = await updatePlayer(player.id, { [field]: draft });
+      const value = field === "number" ? parseInt(draft, 10) : draft;
+      const updated = await updatePlayer(player.id, { [field]: value });
       onPlayerUpdate(updated);
       setEditingField(null);
     } catch (err) {
@@ -155,6 +182,7 @@ export default function PlayerInfoPopover({
       setEditingField(null);
       setNameDraft(player.name);
       setPositionDraft(player.position);
+      setNumberDraft(String(player.number));
     }
   };
 
@@ -271,24 +299,47 @@ export default function PlayerInfoPopover({
 
             {/* Jersey badge — same shape as PlayerToken, sized down */}
             <div className={s.jerseyWrapper}>
-              <svg viewBox="0 0 100 90" width="66" height="60">
-                <path
-                  d="M25 10 L10 30 L25 35 L25 80 L75 80 L75 35 L90 30 L75 10 C70 18 60 22 50 22 C40 22 30 18 25 10Z"
-                  fill={currentTeam?.color ?? "#7C3AED"}
-                  className={s.jerseyPath}
-                />
-                <text
-                  x="50"
-                  y="58"
-                  textAnchor="middle"
-                  fontSize="26"
-                  fontWeight="bold"
-                  fill={numberColorFor(currentTeam?.color ?? "#7C3AED")}
-                  fontFamily="Arial, sans-serif"
-                >
-                  {player.number}
-                </text>
-              </svg>
+              <div className={s.jerseyContainer}>
+                <svg viewBox="0 0 100 90" width="66" height="60">
+                  <path
+                    d="M25 10 L10 30 L25 35 L25 80 L75 80 L75 35 L90 30 L75 10 C70 18 60 22 50 22 C40 22 30 18 25 10Z"
+                    fill={currentTeam?.color ?? "#7C3AED"}
+                    className={s.jerseyPath}
+                  />
+                  {editingField !== "number" && (
+                    <text
+                      x="50"
+                      y="58"
+                      textAnchor="middle"
+                      fontSize="26"
+                      fontWeight="bold"
+                      fill={numberColorFor(currentTeam?.color ?? "#7C3AED")}
+                      fontFamily="Arial, sans-serif"
+                      className={s.numberText}
+                      onClick={() => setEditingField("number")}
+                    >
+                      {player.number}
+                    </text>
+                  )}
+                </svg>
+                {editingField === "number" && (
+                  <input
+                    autoFocus
+                    type="text"
+                    inputMode="numeric"
+                    value={numberDraft}
+                    disabled={saving}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/\D/g, "").slice(0, MAX_PLAYER_NUMBER_CHARS);
+                      setNumberDraft(val);
+                    }}
+                    onKeyDown={(e) => handleFieldKeyDown(e, "number")}
+                    onBlur={() => handleSave("number")}
+                    className={s.numberInput}
+                    aria-label="Player number"
+                  />
+                )}
+              </div>
             </div>
           </div>
 
