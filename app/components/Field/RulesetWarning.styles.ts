@@ -2,9 +2,13 @@
 // UI elsewhere — a ruleset warning flags a lineup that needs attention, not an
 // error. Tokens are defined in app/globals.css.
 export const rulesetWarningStyles = {
-  button: "absolute right-full bottom-10 mr-2",
+  buttonWrapper: "absolute right-full bottom-10 mr-2 group",
   buttonWarning:
     "bg-warning-fill text-warning border-warning-border hover:bg-warning-fill",
+
+  tooltip:
+    "absolute right-0 bottom-full mb-2 w-48 rounded-lg border border-border bg-surface p-2.5 text-caption text-ink-2 shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-150 pointer-events-none",
+  tooltipHint: "mt-1 text-muted",
 
   badge:
     "absolute -top-1.5 -right-1.5 min-w-[1.125rem] h-[1.125rem] px-1 rounded-full bg-warning text-white text-[0.625rem] font-bold leading-none flex items-center justify-center tabular-nums",

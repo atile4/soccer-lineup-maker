@@ -84,27 +84,33 @@ export default function RulesetWarning() {
 
   return (
     <>
-      <Button
-        type="button"
-        variant="secondary"
-        size="icon"
-        ref={buttonRef}
-        onClick={() => setOpen((o) => !o)}
-        aria-expanded={open}
-        aria-label={
-          hasWarnings
-            ? `${count} ruleset ${count === 1 ? "violation" : "violations"} this quarter`
-            : "No ruleset violations this quarter"
-        }
-        className={cn(styles.button, hasWarnings && styles.buttonWarning)}
-      >
-        <AlertTriangle size={18} />
-        {hasWarnings && (
-          <span aria-hidden="true" className={styles.badge}>
-            {count}
-          </span>
-        )}
-      </Button>
+      <div className={styles.buttonWrapper}>
+        <Button
+          type="button"
+          variant="secondary"
+          size="icon"
+          ref={buttonRef}
+          className={cn(hasWarnings && styles.buttonWarning)}
+          onClick={() => setOpen((o) => !o)}
+          aria-expanded={open}
+          aria-label={
+            hasWarnings
+              ? `${count} ruleset ${count === 1 ? "violation" : "violations"} this quarter`
+              : "No ruleset violations this quarter"
+          }
+        >
+          <AlertTriangle size={18} />
+          {hasWarnings && (
+            <span aria-hidden="true" className={styles.badge}>
+              {count}
+            </span>
+          )}
+        </Button>
+        <div className={styles.tooltip}>
+          <p>Shows players that violate guidelines</p>
+          <p className={styles.tooltipHint}>To disable, go to profile menu</p>
+        </div>
+      </div>
 
       {open && (
         <>
