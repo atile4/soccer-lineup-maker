@@ -46,7 +46,9 @@ export default function PlayerInfoPopover({
   const [editingField, setEditingField] = useState<EditableField | null>(null);
   const [nameDraft, setNameDraft] = useState(player.name);
   const [positionDraft, setPositionDraft] = useState(player.position);
-  const [numberDraft, setNumberDraft] = useState(player.number != null ? String(player.number) : "");
+  const [numberDraft, setNumberDraft] = useState(
+    player.number != null ? String(player.number) : "",
+  );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -118,7 +120,14 @@ export default function PlayerInfoPopover({
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [onClose, editingField, confirmingDelete, player.name, player.position, player.number]);
+  }, [
+    onClose,
+    editingField,
+    confirmingDelete,
+    player.name,
+    player.position,
+    player.number,
+  ]);
 
   const handleSave = async (field: EditableField) => {
     let draft: string;
@@ -140,15 +149,9 @@ export default function PlayerInfoPopover({
       return;
     }
 
-    if (field === "number") {
-      if (!draft) {
-        setError("Number can't be empty");
-        return;
-      }
-      if (!/^\d{1,2}$/.test(draft)) {
-        setError("Number must be 1-2 digits");
-        return;
-      }
+    if (field === "number" && draft && !/^\d{1,2}$/.test(draft)) {
+      setError("Number must be 1-2 digits");
+      return;
     }
 
     if (draft === original) {
@@ -159,7 +162,8 @@ export default function PlayerInfoPopover({
     setSaving(true);
     setError(null);
     try {
-      const value = field === "number" ? parseInt(draft, 10) : draft;
+      const value =
+        field === "number" ? (draft ? parseInt(draft, 10) : null) : draft;
       const updated = await updatePlayer(player.id, { [field]: value });
       onPlayerUpdate(updated);
       setEditingField(null);
@@ -305,6 +309,8 @@ export default function PlayerInfoPopover({
                     d="M25 10 L10 30 L25 35 L25 80 L75 80 L75 35 L90 30 L75 10 C70 18 60 22 50 22 C40 22 30 18 25 10Z"
                     fill={currentTeam?.color ?? "#7C3AED"}
                     className={s.jerseyPath}
+                    onClick={() => setEditingField("number")}
+                    style={{ cursor: "pointer" }}
                   />
                   {editingField !== "number" && (
                     <text
@@ -318,7 +324,7 @@ export default function PlayerInfoPopover({
                       className={s.numberText}
                       onClick={() => setEditingField("number")}
                     >
-                      {player.number}
+                      {player.number ?? ""}
                     </text>
                   )}
                 </svg>
@@ -330,7 +336,9 @@ export default function PlayerInfoPopover({
                     value={numberDraft}
                     disabled={saving}
                     onChange={(e) => {
-                      const val = e.target.value.replace(/\D/g, "").slice(0, MAX_PLAYER_NUMBER_CHARS);
+                      const val = e.target.value
+                        .replace(/\D/g, "")
+                        .slice(0, MAX_PLAYER_NUMBER_CHARS);
                       setNumberDraft(val);
                     }}
                     onKeyDown={(e) => handleFieldKeyDown(e, "number")}
