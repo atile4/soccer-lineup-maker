@@ -74,6 +74,9 @@ export const goldenRule: Rule = {
       playerId: player.playerId,
       severity: "warning",
       message:
+        // `Plays all ${periodCount} quarters while ${blockers} ` +
+        // `${short.length === 1 ? "has" : "have"} played as few as ${fewest}. ` +
+        // `No player may play a full game until every teammate has played ${floor}.`,
         `Plays all ${periodCount} quarters while ${blockers} ` +
         `${short.length === 1 ? "has" : "have"} played as few as ${fewest}. ` +
         `No player may play a full game until every teammate has played ${floor}.`,
@@ -101,22 +104,11 @@ export const minimumQuarters: Rule = {
 
     return short.map<RuleViolation>((player) => {
       const played = player.quartersPlayed;
-      const others = inGame.filter(
-        (p) => p.playerId !== player.playerId && p.quartersPlayed >= minQuarters,
-      );
 
       let message: string;
-      if (others.length > 0) {
-        const names = joinNames(others.map((p) => nameOf(ctx, p.playerId)));
-        message =
-          `Plays only ${played} quarter${played === 1 ? "" : "s"} while ${names} ` +
-          `${others.length === 1 ? "has" : "have"} played ${minQuarters} or more. ` +
-          `AYSO requires every player to play at least 2 quarters.`;
-      } else {
-        message =
-          `Plays only ${played} quarter${played === 1 ? "" : "s"}. ` +
-          `AYSO requires every player to play at least 2 quarters.`;
-      }
+      message =
+        `Plays only ${played} quarter${played === 1 ? "" : "s"}. ` +
+        `Every player is required to play at least 2 quarters.`;
 
       return {
         ruleId: minimumQuarters.id,
