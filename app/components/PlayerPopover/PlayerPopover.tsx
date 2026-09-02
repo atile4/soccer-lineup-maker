@@ -46,7 +46,7 @@ export default function PlayerInfoPopover({
   const [editingField, setEditingField] = useState<EditableField | null>(null);
   const [nameDraft, setNameDraft] = useState(player.name);
   const [positionDraft, setPositionDraft] = useState(player.position);
-  const [numberDraft, setNumberDraft] = useState(String(player.number));
+  const [numberDraft, setNumberDraft] = useState(player.number != null ? String(player.number) : "");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -70,7 +70,7 @@ export default function PlayerInfoPopover({
   useEffect(() => {
     setNameDraft(player.name);
     setPositionDraft(player.position);
-    setNumberDraft(String(player.number));
+    setNumberDraft(player.number != null ? String(player.number) : "");
     setEditingField(null);
     setError(null);
   }, [player.id, player.name, player.position, player.number]);
@@ -110,7 +110,7 @@ export default function PlayerInfoPopover({
           setEditingField(null);
           setNameDraft(player.name);
           setPositionDraft(player.position);
-          setNumberDraft(String(player.number));
+          setNumberDraft(player.number != null ? String(player.number) : "");
         } else {
           onClose();
         }
@@ -132,7 +132,7 @@ export default function PlayerInfoPopover({
       original = player.position;
     } else {
       draft = numberDraft.trim();
-      original = String(player.number);
+      original = player.number != null ? String(player.number) : "";
     }
 
     if (field === "name" && !draft) {
@@ -182,7 +182,7 @@ export default function PlayerInfoPopover({
       setEditingField(null);
       setNameDraft(player.name);
       setPositionDraft(player.position);
-      setNumberDraft(String(player.number));
+      setNumberDraft(player.number != null ? String(player.number) : "");
     }
   };
 

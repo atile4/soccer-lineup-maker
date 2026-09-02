@@ -1,7 +1,7 @@
 export interface Player {
   id: string;
   name: string;
-  number: number;
+  number: number | null;
   position: string;
   team_id: string;
 }
