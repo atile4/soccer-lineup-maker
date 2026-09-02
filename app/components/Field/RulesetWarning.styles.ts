@@ -21,12 +21,7 @@ export const rulesetWarningStyles = {
   popoverVisible: "visible",
   popoverHidden: "invisible",
 
-  header: "flex items-start justify-between gap-2",
-  title: "text-h2",
-  close:
-    "-mr-1 -mt-1 rounded-md p-1 text-faint hover:bg-surface-subtle hover:text-muted transition-colors",
-
-  list: "mt-4 flex max-h-80 flex-col gap-2 overflow-y-auto",
+  list: "mt-0 flex max-h-80 flex-col gap-2 overflow-y-auto",
   item: "rounded-lg border border-warning-border bg-warning-fill px-3 py-2.5",
   itemHeader: "flex items-center gap-1.5",
   itemIcon: "shrink-0 text-warning",
@@ -35,7 +30,7 @@ export const rulesetWarningStyles = {
   itemMessage: "mt-1 text-caption leading-snug text-ink-2",
 
   // Clean state
-  clear: "mt-4 flex items-center gap-2 text-body-sm text-ink-2",
+  clear: "mt-0 flex items-center gap-2 text-body-sm text-ink-2",
   clearIcon: "shrink-0 text-accent",
 
   footnote: "mt-4 border-t border-border pt-3 text-caption text-muted",

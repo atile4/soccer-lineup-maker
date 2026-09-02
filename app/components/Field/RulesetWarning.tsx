@@ -1,15 +1,13 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { AlertTriangle, CheckCircle2, X } from "lucide-react";
+import { AlertTriangle, CheckCircle2 } from "lucide-react";
 
 import { Button } from "@/app/components/ui/Button";
-import { useGame } from "@/context/GameContext";
 import { useLineup } from "@/context/LineupContext";
 import { useRulesetWarnings } from "@/context/RulesetWarningsContext";
 import { useRulesetEvaluation } from "@/app/hooks/useRulesetEvaluation";
 import { AYSO_RULES } from "@/app/utils/ruleset/rules";
-import { formatPeriodLabel } from "@/app/utils/period";
 import { rulesetWarningStyles as styles } from "./RulesetWarning.styles";
 import { cn } from "@/app/components/ui/cn";
 
@@ -22,9 +20,8 @@ const MARGIN = 8; // keep the popover this far from the viewport edges
 // they break.
 export default function RulesetWarning() {
   const { enabled } = useRulesetWarnings();
-  const { current, elsewhere, period } = useRulesetEvaluation();
+  const { current, elsewhere } = useRulesetEvaluation();
   const { players } = useLineup();
-  const { currentGame } = useGame();
   const [open, setOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const popoverRef = useRef<HTMLDivElement | null>(null);
@@ -127,18 +124,6 @@ export default function RulesetWarning() {
               style={{ top: coords?.top ?? 0, left: coords?.left ?? 0 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className={styles.header}>
-                <h2 className={styles.title}>Ruleset warnings</h2>
-                <button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  aria-label="Close"
-                  className={styles.close}
-                >
-                  <X size={18} />
-                </button>
-              </div>
-
               {!hasWarnings ? (
                 <p className={styles.clear}>
                   <CheckCircle2 size={16} className={styles.clearIcon} />
