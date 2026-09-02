@@ -1,3 +1,4 @@
+import { MAX_PLAYERS_BY_DIV } from "@/app/constants/playerLimits";
 import type { Rule, RulesetContext, RuleViolation } from "./types";
 
 // ---------------------------------------------------------------------------
@@ -121,6 +122,45 @@ export const minimumQuarters: Rule = {
   },
 };
 
+// Sentinel playerId for aggregate violations that aren't tied to one player
+// (e.g. too many players on field). The UI suppresses the player name column
+// for this value.
+export const FIELD_SIZE_PLAYER_ID = "__field-size__";
+
+// AYSO enforces a maximum number of players on the field per division.
+// Violations are period-specific — the coach sees which quarter is over limit.
+export const maxFieldPlayers: Rule = {
+  id: "max-field-players",
+  label: "Field size",
+  evaluate: (ctx) => {
+    if (!ctx.division) return [];
+    const limit = MAX_PLAYERS_BY_DIV[ctx.division];
+    if (limit === undefined) return [];
+
+    const violations: RuleViolation[] = [];
+
+    for (let i = 0; i < ctx.lineups.length; i++) {
+      const lineup = ctx.lineups[i];
+      const fielded = ctx.participation.filter(
+        (p) => p.statuses[i] === "field",
+      );
+      if (fielded.length <= limit) continue;
+
+      violations.push({
+        ruleId: maxFieldPlayers.id,
+        playerId: FIELD_SIZE_PLAYER_ID,
+        severity: "warning",
+        message:
+          `Q${lineup.period + 1} has ${fielded.length} players on field, ` +
+          `but ${ctx.division} allows a maximum of ${limit}.`,
+        periods: [lineup.period],
+      });
+    }
+
+    return violations;
+  },
+};
+
 // The active ruleset. Add rules here as guidelines are defined — the engine
 // and the field warning modal pick them up with no other changes.
-export const AYSO_RULES: Rule[] = [goldenRule, minimumQuarters];
+export const AYSO_RULES: Rule[] = [goldenRule, minimumQuarters, maxFieldPlayers];

@@ -7,7 +7,7 @@ import { Button } from "@/app/components/ui/Button";
 import { useLineup } from "@/context/LineupContext";
 import { useRulesetWarnings } from "@/context/RulesetWarningsContext";
 import { useRulesetEvaluation } from "@/app/hooks/useRulesetEvaluation";
-import { AYSO_RULES } from "@/app/utils/ruleset/rules";
+import { AYSO_RULES, FIELD_SIZE_PLAYER_ID } from "@/app/utils/ruleset/rules";
 import { rulesetWarningStyles as styles } from "./RulesetWarning.styles";
 import { cn } from "@/app/components/ui/cn";
 
@@ -138,9 +138,11 @@ export default function RulesetWarning() {
                     >
                       <div className={styles.itemHeader}>
                         <AlertTriangle size={14} className={styles.itemIcon} />
-                        <span className={styles.itemPlayer}>
-                          {playerLabel(violation.playerId)}
-                        </span>
+                        {violation.playerId !== FIELD_SIZE_PLAYER_ID && (
+                          <span className={styles.itemPlayer}>
+                            {playerLabel(violation.playerId)}
+                          </span>
+                        )}
                         <span className={styles.itemRule}>
                           {ruleLabel(violation.ruleId)}
                         </span>

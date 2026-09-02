@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { Lineup, Player, SplitBy } from "@/app/types";
+import { Division, Lineup, Player, SplitBy } from "@/app/types";
 import { evaluateRuleset, violationsForPeriod } from "./evaluate";
 import { buildParticipation } from "./participation";
 import type { PlacementsByLineup } from "@/context/GameLineupContext";
@@ -13,6 +13,7 @@ const onBench = { x: null, y: null, bench: true };
 function contextFrom(
   spec: Record<string, string>,
   splitBy: SplitBy = "quarter",
+  division: Division | null = "U-10",
 ): RulesetContext {
   const periodCount = Object.values(spec)[0].length;
   const lineups: Lineup[] = Array.from({ length: periodCount }, (_, period) => ({
@@ -44,7 +45,7 @@ function contextFrom(
     players,
     lineups,
     splitBy,
-    division: "U-10",
+    division,
     participation: buildParticipation(players, lineups, placementsByLineup),
     placementsByLineup,
   };
@@ -283,5 +284,120 @@ describe("violationsForPeriod", () => {
       "bo",
     ]);
     expect(violationsForPeriod(scoped, 0)).toEqual([]);
+  });
+});
+
+describe("max-field-players rule", () => {
+  it("flags a quarter where fielded players exceed the division limit", () => {
+    // U-10 allows 7. 8 players on field in Q1.
+    const violations = evaluateRuleset(
+      contextFrom({
+        a: "FBBB",
+        b: "FBBB",
+        c: "FBBB",
+        d: "FBBB",
+        e: "FBBB",
+        f: "FBBB",
+        g: "FBBB",
+        h: "FBBB",
+      }),
+    );
+
+    const fieldViolations = violations.filter(
+      (v) => v.ruleId === "max-field-players",
+    );
+    expect(fieldViolations).toHaveLength(1);
+    expect(fieldViolations[0]).toMatchObject({
+      playerId: "__field-size__",
+      severity: "warning",
+      periods: [0],
+    });
+    expect(fieldViolations[0].message).toContain("8 players on field");
+    expect(fieldViolations[0].message).toContain("U-10");
+    expect(fieldViolations[0].message).toContain("7");
+  });
+
+  it("stays silent when fielded count is at the limit", () => {
+    // U-10 allows 7. Exactly 7 on field.
+    const violations = evaluateRuleset(
+      contextFrom({
+        a: "FBBB",
+        b: "FBBB",
+        c: "FBBB",
+        d: "FBBB",
+        e: "FBBB",
+        f: "FBBB",
+        g: "FBBB",
+      }),
+    );
+
+    expect(
+      violations.filter((v) => v.ruleId === "max-field-players"),
+    ).toHaveLength(0);
+  });
+
+  it("stays silent when division is null", () => {
+    // 8 on field, but no division to check against.
+    const violations = evaluateRuleset(
+      contextFrom(
+        {
+          a: "FBBB",
+          b: "FBBB",
+          c: "FBBB",
+          d: "FBBB",
+          e: "FBBB",
+          f: "FBBB",
+          g: "FBBB",
+          h: "FBBB",
+        },
+        "quarter",
+        null,
+      ),
+    );
+
+    expect(
+      violations.filter((v) => v.ruleId === "max-field-players"),
+    ).toHaveLength(0);
+  });
+
+  it("flags only the offending quarter", () => {
+    // U-8 allows 4. Q1 has 5 on field, Q2 has 3.
+    const violations = evaluateRuleset(
+      contextFrom(
+        {
+          a: "FB",
+          b: "FB",
+          c: "FB",
+          d: "FB",
+          e: "FB",
+          f: "BB",
+          g: "BB",
+        },
+        "quarter",
+        "U-8",
+      ),
+    );
+
+    const fieldViolations = violations.filter(
+      (v) => v.ruleId === "max-field-players",
+    );
+    expect(fieldViolations).toHaveLength(1);
+    expect(fieldViolations[0].periods).toEqual([0]);
+  });
+
+  it("uses the correct limit for each division", () => {
+    // U-14 allows 11. 12 players on field.
+    const spec = Object.fromEntries(
+      Array.from({ length: 12 }, (_, i) => [String(i), "FBBB"]),
+    );
+    const violations = evaluateRuleset(contextFrom(spec, "quarter", "U-14"));
+
+    const fieldViolations = violations.filter(
+      (v) => v.ruleId === "max-field-players",
+    );
+    expect(fieldViolations).toHaveLength(1);
+    expect(fieldViolations[0].message).toContain("12 players on field");
+    expect(fieldViolations[0].message).toContain("U-14");
+    expect(fieldViolations[0].message).toContain("11");
   });
 });
