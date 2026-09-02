@@ -84,12 +84,13 @@ export default function RulesetWarning() {
 
   return (
     <>
-      <div className={cn(styles.buttonWrapper, hasWarnings && styles.buttonWarning)}>
+      <div className={styles.buttonWrapper}>
         <Button
           type="button"
           variant="secondary"
           size="icon"
           ref={buttonRef}
+          className={cn(hasWarnings && styles.buttonWarning)}
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
           aria-label={
