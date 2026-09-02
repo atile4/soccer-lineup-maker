@@ -1,0 +1,2 @@
+ALTER TABLE players
+ALTER COLUMN number DROP NOT NULL;
