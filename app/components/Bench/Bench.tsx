@@ -14,8 +14,13 @@ import { usePlayerSize } from "@/context/PlayerSizeContext";
 
 export const Bench = () => {
   const [open, setOpen] = useState(true);
-  const { benchedPlayers, placeOnBench, applyPlayerUpdate, removePlayer } =
-    useLineup();
+  const {
+    benchedPlayers,
+    placeOnBench,
+    applyPlayerUpdate,
+    removePlayer,
+    loading,
+  } = useLineup();
   const { openPlayer } = usePlayerInfo();
   const { currentTeam } = useTeam();
   const { scale } = usePlayerSize();
@@ -35,15 +40,33 @@ export const Bench = () => {
         ref={(node) => {
           drop(node);
         }}
-        className={`${styles.benchArea} ${
-          open ? styles.benchAreaOpen : styles.benchAreaClosed
-        } ${isOver ? styles.benchAreaOver : ""}`}
+        className={`${styles.benchArea} ${open ? styles.benchAreaOpen : styles.benchAreaClosed
+          } ${isOver ? styles.benchAreaOver : ""}`}
       >
         <div className={styles.innerWrapper}>
           <h2 className={styles.title}>Bench</h2>
 
           <div className={styles.list}>
-            {benchedPlayers.length === 0 ? (
+            {loading ? (
+              Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className={styles.skeletonWrapper}>
+                  <div
+                    className={styles.skeletonJersey}
+                    style={{
+                      width: `calc(var(--tok) * ${scale})`,
+                      height: `calc(var(--tok) * ${scale})`,
+                    }}
+                  />
+                  <div
+                    className={styles.skeletonName}
+                    style={{
+                      width: `calc(var(--tok) * ${scale} * 0.8)`,
+                      height: `calc(var(--tok-name) * ${scale})`,
+                    }}
+                  />
+                </div>
+              ))
+            ) : benchedPlayers.length === 0 ? (
               <p className={styles.emptyText}>No players benched</p>
             ) : (
               benchedPlayers.map((player) => (

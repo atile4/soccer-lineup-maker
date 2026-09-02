@@ -61,18 +61,26 @@ export const teamBuilderStyles = {
   rightCol: "flex flex-col gap-4 min-w-0",
 
   addCard: "bg-surface border border-border rounded-xl shadow-sm p-4",
-  addCardTitle: "text-h3 mb-1",
+  addCardTitle: "text-h3 mb-3",
   addCardHint: "text-caption text-muted mb-3",
+  sectionLabel: "block text-caption font-bold text-muted uppercase tracking-wide mb-2",
+  importBlock: "pb-3 mb-3 border-b border-border",
+  importButtons: "grid grid-cols-1 sm:grid-cols-2 gap-2",
+  importButton:
+    "flex items-center justify-center gap-1.5 px-3 py-2 text-caption font-semibold text-ink bg-surface-subtle border border-border rounded-md hover:bg-paper transition-colors",
+  manualBlock: "",
   addForm:
-    "grid grid-cols-2 sm:grid-cols-[1fr_78px_1.2fr_auto] gap-2.5 items-end",
+    "grid grid-cols-2 sm:grid-cols-[1fr_78px_1.2fr_auto] gap-2.5 items-start",
   formField: "flex flex-col gap-1",
-  formLabel: "text-caption font-semibold text-muted",
+  formLabel: "text-caption font-semibold text-muted mb-2",
   formInputWrap: "relative",
   formInput:
-    "w-full px-2.5 py-2 pr-10 text-body-sm text-ink bg-surface border border-border rounded-md placeholder:text-faint focus:outline-none focus:ring-2 focus:ring-accent-border focus:border-accent",
+    "w-full px-2.5 py-2 text-body-sm text-ink bg-surface border border-border rounded-md placeholder:text-faint focus:outline-none focus:ring-2 focus:ring-accent-border focus:border-accent",
   formInputCenter: "text-center",
   formCounter:
     "absolute right-2 bottom-0.5 text-[10px] leading-none text-faint pointer-events-none select-none",
+  formCounterInline:
+    "text-[10px] leading-none text-faint text-right w-full",
   addButton:
     "px-4 h-[38px] text-body-sm font-semibold text-white bg-accent rounded-md shadow-sm hover:bg-accent-hover whitespace-nowrap transition-colors",
 
@@ -99,10 +107,17 @@ export const teamBuilderStyles = {
   rosterRowDupe: "bg-danger-fill ring-1 ring-inset ring-danger-border",
   numberBadge:
     "w-9 h-9 rounded-full flex items-center justify-center text-body-sm font-bold flex-shrink-0 bg-surface-subtle text-ink",
-  rosterName: "text-body-sm font-semibold text-ink truncate",
+  rosterName: "text-body-sm font-semibold text-ink truncate cursor-text",
   rosterSub: "text-caption text-muted mt-0.5",
   positionChip:
     "text-caption font-bold text-accent bg-surface-subtle px-2.5 py-1 rounded-full flex-shrink-0",
+  editButton:
+    "w-8 h-8 flex items-center justify-center text-muted rounded-md hover:bg-surface-subtle hover:text-ink transition-colors flex-shrink-0",
+  editInputWrap: "flex-1 min-w-0",
+  editInput:
+    "w-full px-2 py-1 text-body-sm text-ink bg-surface border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-accent-border focus:border-accent",
+  editInputSmall:
+    "w-7 px-2 py-1 text-body-sm text-ink bg-surface border border-border rounded-md text-center focus:outline-none focus:ring-2 focus:ring-accent-border focus:border-accent",
   deleteButton:
     "w-8 h-8 flex items-center justify-center text-muted rounded-md hover:bg-danger-fill hover:text-danger transition-colors flex-shrink-0",
 
