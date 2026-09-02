@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { ChevronDown, Check, Plus, Trash2 } from "lucide-react";
 import { teamSwitcherStyles as styles } from "./TeamSwitcher.styles";
 import { useTeam } from "@/context/TeamContext";
+import { useAuth } from "@/context/AuthContext";
+import { fetchIsPremium } from "@/services/premium";
 import { TeamWithPlayerCount } from "@/app/types";
 import { MAX_TEAMS } from "@/app/constants/playerLimits";
 import DeleteTeamWarningModal from "./DeleteTeamWarningModal";
@@ -21,6 +23,7 @@ const teamMeta = (team: TeamWithPlayerCount) =>
 
 export default function TeamSwitcher() {
   const { teams, currentTeamId, loading, switchTeam, deleteTeam } = useTeam();
+  const { session } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [teamToDelete, setTeamToDelete] = useState<TeamWithPlayerCount | null>(
     null,
@@ -58,8 +61,9 @@ export default function TeamSwitcher() {
     setIsOpen(false);
   };
 
-  const handleCreateTeam = () => {
-    if (teams.length >= MAX_TEAMS) {
+  const handleCreateTeam = async () => {
+    const userId = session?.user.id ?? null;
+    if (teams.length >= MAX_TEAMS && !(userId && (await fetchIsPremium(userId)))) {
       setShowLimitWarning(true);
       return;
     }

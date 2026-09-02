@@ -7,7 +7,7 @@ RETURNS boolean AS $$
   SELECT EXISTS (
     SELECT 1 FROM games g
     JOIN teams t ON t.id = g.team_id
-    WHERE g.id = check_game_id AND t.user_id = auth.uid()::text
+    WHERE g.id = check_game_id AND t.user_id = auth.uid()
   );
 $$ LANGUAGE sql SECURITY DEFINER STABLE;
 
@@ -17,6 +17,6 @@ RETURNS boolean AS $$
     SELECT 1 FROM lineups l
     JOIN games g ON g.id = l.game_id
     JOIN teams t ON t.id = g.team_id
-    WHERE l.id = check_lineup_id AND t.user_id = auth.uid()::text
+    WHERE l.id = check_lineup_id AND t.user_id = auth.uid()
   );
 $$ LANGUAGE sql SECURITY DEFINER STABLE;
