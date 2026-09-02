@@ -39,7 +39,15 @@ export const PlayerList = () => {
   const [position, setPosition] = useState("");
   const [error, setError] = useState("");
 
-  const nextNumber = Math.max(...players.map((p) => p.number), 0) + 1;
+  const nextNumber =
+    Math.max(
+      ...players
+        .map((p) => p.number)
+        .filter(
+          (playerNumber): playerNumber is number => playerNumber !== null,
+        ),
+      0,
+    ) + 1;
 
   const closeCreateModal = () => {
     setShowCreateModal(false);
@@ -55,8 +63,11 @@ export const PlayerList = () => {
       setError("Name is required");
       return;
     }
-    const parsedNumber = number === "" ? nextNumber : Number(number);
-    if (!Number.isInteger(parsedNumber) || parsedNumber < 0) {
+    const parsedNumber = number === "" ? null : Number(number);
+    if (
+      parsedNumber !== null &&
+      (!Number.isInteger(parsedNumber) || parsedNumber < 0)
+    ) {
       setError("Number must be a valid whole number");
       return;
     }

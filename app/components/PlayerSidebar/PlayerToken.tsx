@@ -7,7 +7,7 @@ export type PlayerTokenVariant = "default" | "field" | "bench";
 
 type PlayerTokenProps = {
   name: string;
-  number: number;
+  number: number | null;
   variant?: PlayerTokenVariant;
   jerseyColor?: string; // jersey fill color
   nameColor?: string; // player name text color (ignored for the "field" variant)

@@ -13,7 +13,7 @@ export async function fetchPlayers(teamId: string) {
 
 export type NewPlayer = {
   name: string;
-  number: number;
+  number: number | null;
   position: string;
 };
 

@@ -140,7 +140,7 @@ export default function TeamBuilder() {
       if (players.length > 0) {
         const newPlayers: NewPlayer[] = players.map((p) => ({
           name: p.name || "Unnamed player",
-          number: p.number ? parseInt(p.number, 10) : 0,
+          number: p.number ? parseInt(p.number, 10) : null,
           position: p.position,
         }));
         await createPlayers(team.id, newPlayers);
