@@ -116,11 +116,13 @@ export const ManageTeamsTab: React.FC = () => {
         <h2 className={sidebarStyles.sectionTitle}>Rules Settings</h2>
         <div className="space-y-3 mt-3">
           {AYSO_RULES.map((rule) => (
-            <label
-              key={rule.id}
-              className="flex items-center justify-between gap-3 cursor-pointer"
-            >
-              <span className="text-body-sm text-ink">{rule.label}</span>
+            <div key={rule.id} className="flex items-center justify-between gap-3 cursor-pointer">
+              <div className="relative group">
+                {rule.tooltip && (
+                  <p className={sidebarStyles.ruleTooltip}>{rule.tooltip}</p>
+                )}
+                <span className="text-body-sm text-ink">{rule.label}</span>
+              </div>
               <button
                 type="button"
                 role="switch"
@@ -145,7 +147,7 @@ export const ManageTeamsTab: React.FC = () => {
                   }`}
                 />
               </button>
-            </label>
+            </div>
           ))}
         </div>
       </div>

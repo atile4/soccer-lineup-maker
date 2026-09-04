@@ -51,6 +51,7 @@ export function fieldedPeriods(
 export const goldenRule: Rule = {
   id: "golden-rule",
   label: "Everybody plays",
+  tooltip: "No player can play 4 quarters unless every other player has played 3.",
   evaluate: (ctx) => {
     const periodCount = ctx.lineups.length;
     const floor = periodCount - 1; // 3 quarters, for a 4-quarter game
@@ -95,6 +96,7 @@ export const goldenRule: Rule = {
 export const minimumQuarters: Rule = {
   id: "minimum-quarters",
   label: "Minimum play time",
+  tooltip: "All players must play for at minimum 2 quarters.",
   evaluate: (ctx) => {
     const minQuarters = 2;
     const inGame = ctx.participation.filter((p) => p.inGame);
@@ -132,6 +134,7 @@ export const FIELD_SIZE_PLAYER_ID = "__field-size__";
 export const maxFieldPlayers: Rule = {
   id: "max-field-players",
   label: "Player count limit",
+  tooltip: "No more than the allowed number of players may be on the field at once.",
   evaluate: (ctx) => {
     if (!ctx.division) return [];
     const limit = MAX_PLAYERS_BY_DIV[ctx.division];

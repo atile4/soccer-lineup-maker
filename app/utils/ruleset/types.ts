@@ -33,6 +33,7 @@ export interface RulesetContext {
 export interface Rule {
   id: string;
   label: string;
+  tooltip?: string;
   // Return [] when the rule passes or does not apply.
   evaluate: (ctx: RulesetContext) => RuleViolation[];
 }
