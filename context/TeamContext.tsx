@@ -17,6 +17,10 @@ import {
   updateTeamColor as updateTeamColorService,
 } from "@/services/teams";
 import { fetchCurrentIDs } from "@/services/profiles";
+import {
+  fetchTeamRuleSettings,
+  upsertTeamRuleSetting,
+} from "@/services/teamRuleSettings";
 import { TeamWithPlayerCount } from "@/app/types";
 
 interface TeamContextValue {
@@ -29,6 +33,8 @@ interface TeamContextValue {
   updateTeamName: (teamId: string, name: string) => Promise<void>;
   updateTeamColor: (teamId: string, color: string) => Promise<void>;
   refreshTeams: () => Promise<void>;
+  teamRuleSettings: Record<string, boolean>;
+  updateTeamRuleSetting: (ruleId: string, enabled: boolean) => Promise<void>;
 }
 
 const TeamContext = createContext<TeamContextValue | undefined>(undefined);
@@ -40,6 +46,7 @@ export function TeamProvider({ children }: { children: ReactNode }) {
   const [teams, setTeams] = useState<TeamWithPlayerCount[]>([]);
   const [currentTeamId, setCurrentTeamId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [teamRuleSettings, setTeamRuleSettings] = useState<Record<string, boolean>>({});
 
   const refreshTeams = useCallback(async () => {
     if (!userId) {
@@ -73,6 +80,21 @@ export function TeamProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     refreshTeams();
   }, [refreshTeams]);
+
+  // Load rule settings when the current team changes.
+  useEffect(() => {
+    if (!currentTeamId) {
+      setTeamRuleSettings({});
+      return;
+    }
+    fetchTeamRuleSettings(currentTeamId)
+      .then((rows) => {
+        const settings: Record<string, boolean> = {};
+        for (const row of rows) settings[row.rule_id] = row.enabled;
+        setTeamRuleSettings(settings);
+      })
+      .catch((err) => console.error("Failed to load rule settings:", err));
+  }, [currentTeamId]);
 
   const switchTeam = useCallback(
     async (teamId: string) => {
@@ -145,6 +167,23 @@ export function TeamProvider({ children }: { children: ReactNode }) {
     [patchTeam],
   );
 
+  const updateTeamRuleSetting = useCallback(
+    async (ruleId: string, enabled: boolean) => {
+      if (!currentTeamId) return;
+      const previous = teamRuleSettings;
+      // Optimistic update
+      setTeamRuleSettings((prev) => ({ ...prev, [ruleId]: enabled }));
+      try {
+        await upsertTeamRuleSetting(currentTeamId, ruleId, enabled);
+      } catch (err) {
+        console.error("Failed to update rule setting:", err);
+        setTeamRuleSettings(previous);
+        throw err;
+      }
+    },
+    [currentTeamId, teamRuleSettings],
+  );
+
   const currentTeam = teams.find((t) => t.id === currentTeamId) ?? null;
 
   return (
@@ -159,6 +198,8 @@ export function TeamProvider({ children }: { children: ReactNode }) {
         updateTeamName,
         updateTeamColor,
         refreshTeams,
+        teamRuleSettings,
+        updateTeamRuleSetting,
       }}
     >
       {children}

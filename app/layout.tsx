@@ -8,7 +8,12 @@ import { AuthProvider } from "@/context/AuthContext";
 import { TeamProvider } from "@/context/TeamContext";
 import { GameProvider } from "@/context/GameContext";
 import { PlayerSizeProvider } from "@/context/PlayerSizeContext";
+import { RulesetWarningsProvider } from "@/context/RulesetWarningsContext";
 import { COOKIE_NAME, parseScale } from "@/context/playerSize";
+import {
+  COOKIE_NAME as RULESET_COOKIE,
+  parseEnabled,
+} from "@/context/rulesetWarnings";
 
 export const metadata: Metadata = {
   title: "Soccer Lineup Organizer",
@@ -35,6 +40,9 @@ export default function RootLayout({
   // Read the saved token-size preference from the cookie on the server so the
   // correct size renders on first paint (avoids a flash to the default).
   const initialScale = parseScale(cookies().get(COOKIE_NAME)?.value);
+  const initialRulesetWarnings = parseEnabled(
+    cookies().get(RULESET_COOKIE)?.value,
+  );
 
   return (
     <html lang="en">
@@ -45,7 +53,9 @@ export default function RootLayout({
           <TeamProvider>
             <GameProvider>
               <PlayerSizeProvider initialScale={initialScale}>
-                {children}
+                <RulesetWarningsProvider initialEnabled={initialRulesetWarnings}>
+                  {children}
+                </RulesetWarningsProvider>
               </PlayerSizeProvider>
             </GameProvider>
           </TeamProvider>

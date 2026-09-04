@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
+import { useRulesetWarnings } from "@/context/RulesetWarningsContext";
 import { popoverStyles, buttonStyles } from "./ProfileMenu.styles";
 import { useRouter } from "next/navigation";
 
@@ -21,13 +22,14 @@ export default function ProfileMenu({
   const { session, loading } = useAuth();
   const user = session?.user;
   const router = useRouter();
+  const { enabled: rulesetWarningsEnabled, setEnabled: setRulesetWarningsEnabled } =
+    useRulesetWarnings();
 
   const displayName = user?.user_metadata?.full_name ?? "";
   const photoURL = user?.user_metadata?.avatar_url ?? "";
   const email = user?.email ?? "";
 
   const [isOpen, setIsOpen] = useState(false);
-  const [rulesetWarningsEnabled, setRulesetWarningsEnabled] = useState(false);
   const popoverRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const reportIssuesUrl =
@@ -79,7 +81,7 @@ export default function ProfileMenu({
   };
 
   const handleRulesetWarningsToggle = () => {
-    setRulesetWarningsEnabled((enabled) => !enabled);
+    setRulesetWarningsEnabled(!rulesetWarningsEnabled);
   };
 
   const getInitials = (name: string) =>

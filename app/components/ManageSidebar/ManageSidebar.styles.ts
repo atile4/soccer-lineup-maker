@@ -41,7 +41,7 @@ export const sidebarStyles = {
     "flex items-center justify-center rounded-lg border border-dashed border-border px-4 py-10 text-center text-body-sm text-muted",
 
   // Fields section
-  manageSection: "mt-6 pt-6 border-t border-border space-y-5",
+  manageSection: "mt-3 pt-3 border-t border-border space-y-5",
   fieldGroup: "flex flex-col gap-1",
   sectionTitle: "text-h3 text-ink",
   selectWrapper: "relative",
@@ -95,4 +95,8 @@ export const sidebarStyles = {
     "fixed bottom-6 left-1/2 -translate-x-1/2 text-body-sm font-semibold px-5 py-2.5 rounded-xl shadow-lg z-50 bg-ink text-white",
   toastError:
     "fixed bottom-6 left-1/2 -translate-x-1/2 text-body-sm font-semibold px-5 py-2.5 rounded-xl shadow-lg z-50 bg-danger text-white",
+
+  // Rule tooltip
+  ruleTooltip:
+    "absolute bottom-full left-0 mb-1 w-full min-w-64 rounded-lg border border-border bg-surface p-2 text-caption text-ink-2 shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-150 pointer-events-none z-10",
 };
