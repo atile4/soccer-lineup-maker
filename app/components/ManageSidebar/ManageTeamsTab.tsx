@@ -77,7 +77,7 @@ export const ManageTeamsTab: React.FC = () => {
     <>
       {/* Edit team name */}
       <div className={sidebarStyles.fieldGroup}>
-        <h2 className={sidebarStyles.sectionTitle}>Edit team</h2>
+        <h2 className={sidebarStyles.sectionTitle}>Edit Team</h2>
         <input
           type="text"
           value={name}
@@ -101,12 +101,19 @@ export const ManageTeamsTab: React.FC = () => {
         </div>
       </div>
 
+      {/* Save — commits both name and color together */}
+      <button
+        type="button"
+        onClick={handleSave}
+        disabled={saving || !dirty || !name.trim()}
+        className={sidebarStyles.saveNotesButton}
+      >
+        {saving ? "Saving…" : "Save"}
+      </button>
+
       {/* Rules toggles */}
       <div className={sidebarStyles.manageSection}>
         <h2 className={sidebarStyles.sectionTitle}>Rules Settings</h2>
-        {/* <p className={sidebarStyles.extraSectionText}>
-          Toggle AYSO rules on or off for this team.
-        </p> */}
         <div className="space-y-3 mt-3">
           {AYSO_RULES.map((rule) => (
             <label
@@ -142,16 +149,6 @@ export const ManageTeamsTab: React.FC = () => {
           ))}
         </div>
       </div>
-
-      {/* Save — commits both name and color together */}
-      <button
-        type="button"
-        onClick={handleSave}
-        disabled={saving || !dirty || !name.trim()}
-        className={sidebarStyles.saveNotesButton}
-      >
-        {saving ? "Saving…" : "Save"}
-      </button>
 
       {/* Toast — portalled to <body> so its fixed positioning isn't contained by the sidebar's transform */}
       {toast &&
