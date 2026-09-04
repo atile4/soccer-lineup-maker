@@ -41,7 +41,7 @@ export const sidebarStyles = {
     "flex items-center justify-center rounded-lg border border-dashed border-border px-4 py-10 text-center text-body-sm text-muted",
 
   // Fields section
-  manageSection: "mt-6 pt-6 border-t border-border space-y-5",
+  manageSection: "mt-3 pt-3 border-t border-border space-y-5",
   fieldGroup: "flex flex-col gap-1",
   sectionTitle: "text-h3 text-ink",
   selectWrapper: "relative",
