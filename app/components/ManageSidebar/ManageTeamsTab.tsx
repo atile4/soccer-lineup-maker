@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { sidebarStyles } from "./ManageSidebar.styles";
 import ColorSwitcher from "@/app/components/ui/ColorSwitcher";
 import { useTeam } from "@/context/TeamContext";
+import { AYSO_RULES } from "@/app/utils/ruleset/rules";
 
 type ToastVariant = "success" | "error";
 
@@ -19,7 +20,13 @@ interface ToastState {
 const MAX_TEAM_NAME_CHARS = 20;
 
 export const ManageTeamsTab: React.FC = () => {
-  const { currentTeam, updateTeamName, updateTeamColor } = useTeam();
+  const {
+    currentTeam,
+    updateTeamName,
+    updateTeamColor,
+    teamRuleSettings,
+    updateTeamRuleSetting,
+  } = useTeam();
 
   const [name, setName] = useState("");
   const [color, setColor] = useState("");
@@ -91,6 +98,48 @@ export const ManageTeamsTab: React.FC = () => {
         <div className={sidebarStyles.fieldGroup}>
           <h2 className={sidebarStyles.sectionTitle}>Edit Team Color</h2>
           <ColorSwitcher value={color} onChange={setColor} />
+        </div>
+      </div>
+
+      {/* Rules toggles */}
+      <div className={sidebarStyles.manageSection}>
+        <h2 className={sidebarStyles.sectionTitle}>Rules Settings</h2>
+        {/* <p className={sidebarStyles.extraSectionText}>
+          Toggle AYSO rules on or off for this team.
+        </p> */}
+        <div className="space-y-3 mt-3">
+          {AYSO_RULES.map((rule) => (
+            <label
+              key={rule.id}
+              className="flex items-center justify-between gap-3 cursor-pointer"
+            >
+              <span className="text-body-sm text-ink">{rule.label}</span>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={teamRuleSettings[rule.id] !== false}
+                onClick={() =>
+                  updateTeamRuleSetting(
+                    rule.id,
+                    !(teamRuleSettings[rule.id] !== false),
+                  )
+                }
+                className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-border ${
+                  teamRuleSettings[rule.id] !== false
+                    ? "bg-accent"
+                    : "bg-border"
+                }`}
+              >
+                <span
+                  className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out ${
+                    teamRuleSettings[rule.id] !== false
+                      ? "translate-x-4"
+                      : "translate-x-0"
+                  }`}
+                />
+              </button>
+            </label>
+          ))}
         </div>
       </div>
 

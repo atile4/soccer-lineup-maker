@@ -131,7 +131,7 @@ export const FIELD_SIZE_PLAYER_ID = "__field-size__";
 // Violations are period-specific — the coach sees which quarter is over limit.
 export const maxFieldPlayers: Rule = {
   id: "max-field-players",
-  label: "Field size",
+  label: "Player count limit",
   evaluate: (ctx) => {
     if (!ctx.division) return [];
     const limit = MAX_PLAYERS_BY_DIV[ctx.division];
@@ -163,4 +163,8 @@ export const maxFieldPlayers: Rule = {
 
 // The active ruleset. Add rules here as guidelines are defined — the engine
 // and the field warning modal pick them up with no other changes.
-export const AYSO_RULES: Rule[] = [goldenRule, minimumQuarters, maxFieldPlayers];
+export const AYSO_RULES: Rule[] = [
+  goldenRule,
+  minimumQuarters,
+  maxFieldPlayers,
+];

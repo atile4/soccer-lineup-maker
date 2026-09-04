@@ -8,6 +8,7 @@ import { useLineup } from "@/context/LineupContext";
 import { useRulesetWarnings } from "@/context/RulesetWarningsContext";
 import { useTeam } from "@/context/TeamContext";
 import { buildParticipation } from "@/app/utils/ruleset/participation";
+import { AYSO_RULES } from "@/app/utils/ruleset/rules";
 import {
   evaluateRuleset,
   violationsForPeriod,
@@ -42,7 +43,7 @@ export function useRulesetEvaluation(): RulesetEvaluation {
   const { enabled } = useRulesetWarnings();
   const { players } = useLineup();
   const { currentGame, lineups } = useGame();
-  const { currentTeam } = useTeam();
+  const { currentTeam, teamRuleSettings } = useTeam();
   const { placementsByLineup } = useGameLineup();
 
   const currentLineupId = currentGame?.current_lineup_id ?? null;
@@ -54,14 +55,17 @@ export function useRulesetEvaluation(): RulesetEvaluation {
       lineups.find((l) => l.id === currentLineupId)?.period ?? null;
     if (period === null) return EMPTY;
 
-    const all = evaluateRuleset({
-      players,
-      lineups,
-      splitBy: currentGame.split_by,
-      division: currentTeam?.division ?? null,
-      participation: buildParticipation(players, lineups, placementsByLineup),
-      placementsByLineup,
-    });
+    const all = evaluateRuleset(
+      {
+        players,
+        lineups,
+        splitBy: currentGame.split_by,
+        division: currentTeam?.division ?? null,
+        participation: buildParticipation(players, lineups, placementsByLineup),
+        placementsByLineup,
+      },
+      AYSO_RULES.filter((r) => teamRuleSettings[r.id] !== false),
+    );
 
     const current = violationsForPeriod(all, period);
     return {
@@ -77,5 +81,6 @@ export function useRulesetEvaluation(): RulesetEvaluation {
     currentLineupId,
     currentTeam?.division,
     placementsByLineup,
+    teamRuleSettings,
   ]);
 }
