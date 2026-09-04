@@ -76,7 +76,8 @@ export default function RulesetWarning() {
   // "Jimmy, 10" — falls back to the id if the roster hasn't loaded yet.
   const playerLabel = (playerId: string) => {
     const player = players.find((p) => p.id === playerId);
-    return player ? `${player.name}, ${player.number}` : "Unknown player";
+    const number = player?.number ? `, ${player.number}` : "";
+    return player ? `${player.name}${number}` : "Unknown player";
   };
 
   return (
