@@ -39,7 +39,7 @@ export default function DeletePlayerModal({
         <div className="rounded-lg bg-surface-subtle px-3 py-2 text-center">
           <dt className="text-caption font-medium text-muted">Number</dt>
           <dd className="mt-0.5 text-body font-semibold text-ink">
-            #{player.number}
+            {player.number ? player.number : "—"}
           </dd>
         </div>
         <div className="rounded-lg bg-surface-subtle px-3 py-2 text-center">

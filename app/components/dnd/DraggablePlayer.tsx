@@ -14,7 +14,7 @@ interface DraggablePlayerProps {
   onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
   // Preview payload — used by CustomDragLayer to render the dragged token.
   name?: string;
-  number?: number;
+  number: number | null;
   jerseyColor?: string;
   previewVariant?: PlayerTokenVariant;
 }

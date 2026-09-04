@@ -3,7 +3,7 @@ import { playerCardStyles as styles } from "./PlayerCard.styles";
 
 type PlayerCardProps = {
   name: string;
-  number: number;
+  number: number | null;
   jerseyColor?: string; // jersey fill color
   nameColor?: string; // player name text color
 };
